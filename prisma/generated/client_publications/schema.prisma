@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client_publications"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/publications"
+}
+
+model Papers {
+  id          Int     @id @default(autoincrement()) @db.UnsignedSmallInt
+  author1     String? @db.TinyText
+  all_authors String? @db.Text
+  year        Int?    @db.Year
+  title       String? @db.Text
+  journal     String? @db.Text
+  volume      Int?    @db.UnsignedSmallInt
+  issue       Int?    @db.UnsignedTinyInt
+  first_page  String? @db.TinyText
+  last_page   String? @db.TinyText
+  link        String? @db.Text
+}
