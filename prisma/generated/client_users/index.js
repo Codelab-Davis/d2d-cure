@@ -31,12 +31,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.9.1
- * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
+ * Prisma Client JS version: 5.10.2
+ * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
  */
 Prisma.prismaVersion = {
-  client: "5.9.1",
-  engine: "23fdc5965b1e05fc54e5f26ed3de66776b93de64"
+  client: "5.10.2",
+  engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -143,7 +143,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Hussain\\Desktop\\D2D\\prisma\\generated\\client_users",
+      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_users",
       "fromEnvVar": null
     },
     "config": {
@@ -160,11 +160,11 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../..",
-  "clientVersion": "5.9.1",
-  "engineVersion": "23fdc5965b1e05fc54e5f26ed3de66776b93de64",
+  "clientVersion": "5.10.2",
+  "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
   "datasourceNames": [
     "db"
   ],
@@ -178,9 +178,9 @@ const config = {
       }
     }
   },
-  "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKICBvdXRwdXQgICA9ICIuL2dlbmVyYXRlZC9jbGllbnRfdXNlcnMiCn0KCmRhdGFzb3VyY2UgZGIgewogIHByb3ZpZGVyID0gIm15c3FsIgogIHVybCAgICAgID0gIm15c3FsOi8vYWRtaW46aGVsbG90aGVyZUBkMmRkYi5ja3hqZGQ0ZXc2Y3AudXMtZWFzdC0yLnJkcy5hbWF6b25hd3MuY29tOjMzMDYvdXNlcnMiCn0KCm1vZGVsIEluc3RpdHV0aW9ucyB7CiAgaWQgICAgICAgICAgIEludCAgICAgQGlkIEBkZWZhdWx0KGF1dG9pbmNyZW1lbnQoKSkgQGRiLlVuc2lnbmVkU21hbGxJbnQKICBmdWxsbmFtZSAgICAgU3RyaW5nICBAZGIuVmFyQ2hhcig2NCkKICBhYmJyICAgICAgICAgU3RyaW5nICBAZGIuVmFyQ2hhcigxMikKICBzdGF0ZSAgICAgICAgU3RyaW5nPyBAZGIuVmFyQ2hhcigyKQogIGNvdW50cnlfY29kZSBTdHJpbmcgIEBkZWZhdWx0KCJVU0EiKSBAZGIuVmFyQ2hhcigzKQogIHVybCAgICAgICAgICBTdHJpbmc/IEBkYi5WYXJDaGFyKDEwMCkKfQoKbW9kZWwgVXNlcnMgewogIGlkICAgICAgICAgICAgIEludCAgICAgICAgICBAaWQgQGRlZmF1bHQoYXV0b2luY3JlbWVudCgpKSBAZGIuVW5zaWduZWRTbWFsbEludAogIHVzZXJfbmFtZSAgICAgIFN0cmluZyAgICAgICBAZGIuVmFyQ2hhcigzMCkKICBnaXZlbl9uYW1lICAgICBTdHJpbmcgICAgICAgQGRiLlZhckNoYXIoMzApCiAgdGl0bGUgICAgICAgICAgU3RyaW5nPyAgICAgIEBkYi5WYXJDaGFyKDUwKQogIHBpICAgICAgICAgICAgIFN0cmluZz8gICAgICBAZGIuVmFyQ2hhcigzMCkKICBpbnN0aXR1dGlvbiAgICBTdHJpbmcgICAgICAgQGRiLlZhckNoYXIoNTApCiAgc3RhdHVzICAgICAgICAgVXNlcnNfc3RhdHVzCiAgZW1haWwgICAgICAgICAgU3RyaW5nICAgICAgIEBkYi5WYXJDaGFyKDUwKQogIHBhc3N3b3JkICAgICAgIFN0cmluZyAgICAgICBAZGIuVmFyQ2hhcigzMCkKICBpbWFnZV9maWxlbmFtZSBTdHJpbmcgICAgICAgQGRiLlZhckNoYXIoODQpCiAgYXBwcm92ZWQgICAgICAgQm9vbGVhbgogIHJlZ19kYXRlICAgICAgIERhdGVUaW1lICAgICBAZGVmYXVsdChub3coKSkgQGRiLlRpbWVzdGFtcCgwKQp9CgplbnVtIFVzZXJzX3N0YXR1cyB7CiAgQURNSU4KICBzdHVkZW50CiAgcHJvZmVzc29yCiAgb3RoZXIKfQo=",
-  "inlineSchemaHash": "98f449dccfd1a66627d7a3b6ddc0334140ace2d49cdf6d751172bee3a7a61aef",
-  "noEngine": false
+  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  output   = \"./generated/client_users\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/users\"\r\n}\r\n\r\nmodel Institutions {\r\n  id           Int     @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  fullname     String  @db.VarChar(64)\r\n  abbr         String  @db.VarChar(12)\r\n  state        String? @db.VarChar(2)\r\n  country_code String  @default(\"USA\") @db.VarChar(3)\r\n  url          String? @db.VarChar(100)\r\n}\r\n\r\nmodel Users {\r\n  id             Int          @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  user_name      String       @db.VarChar(30)\r\n  given_name     String       @db.VarChar(30)\r\n  title          String?      @db.VarChar(50)\r\n  pi             String?      @db.VarChar(30)\r\n  institution    String       @db.VarChar(50)\r\n  status         Users_status\r\n  email          String       @db.VarChar(50)\r\n  password       String       @db.VarChar(30)\r\n  image_filename String       @db.VarChar(84)\r\n  approved       Boolean\r\n  reg_date       DateTime     @default(now()) @db.Timestamp(0)\r\n}\r\n\r\nenum Users_status {\r\n  ADMIN\r\n  student\r\n  professor\r\n  other\r\n}\r\n",
+  "inlineSchemaHash": "feca2b6711d459ae21624a5c1c8a751002cd5b034677e6dffbfe9e077434f723",
+  "copyEngine": true
 }
 
 const fs = require('fs')
@@ -202,7 +202,7 @@ if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
 
 config.runtimeDataModel = JSON.parse("{\"models\":{\"Institutions\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"fullname\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"abbr\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"state\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"country_code\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"default\":\"USA\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"url\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false},\"Users\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"user_name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"given_name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"title\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"pi\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"institution\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"status\",\"kind\":\"enum\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Users_status\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"email\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"password\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"image_filename\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"approved\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Boolean\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"reg_date\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{\"Users_status\":{\"values\":[{\"name\":\"ADMIN\",\"dbName\":null},{\"name\":\"student\",\"dbName\":null},{\"name\":\"professor\",\"dbName\":null},{\"name\":\"other\",\"dbName\":null}],\"dbName\":null}},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.getQueryEngineWasmModule = undefined
+config.engineWasm = undefined
 
 
 const { warnEnvConflicts } = require('./runtime/library.js')
