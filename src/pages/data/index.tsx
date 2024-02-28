@@ -9,9 +9,9 @@ const DataPage = () => {
   const [residueNumber, setResidueNumber] = useState('');
   const [institutions, setInstitutions] = useState<any[]>([]);
   const [characterizationData, setCharacterizationData] = useState<any[]>([]);
+  const [showNonCurated, setShowNonCurated] = useState(false); 
+  const [sequences, setSequences] = useState<any[]>([]);
 
-  // Placeholder for the number of records found
-  const recordsFound = 123; // Placeholder value
 
   useEffect(() => {
     const fetchInstitutions = async () => {
@@ -25,17 +25,52 @@ const DataPage = () => {
       const data = await response.json();
       setCharacterizationData(data);
     };
+    const fetchSequences = async () => {
+      const response = await fetch('/api/getSequenceData');
+      const data = await response.json();
+      setSequences(data);
+    };
 
+    fetchSequences();
     fetchInstitutions();
     fetchData();
   }, []);
 
-  const getVariantDisplay = (resid:any, resnum:any, resmut:any) => {
-    const variant = `${resid}${resnum}${resmut}`;
-    return variant === 'X0X' ? 'WT' : variant;
-  };
+  const filteredData = characterizationData
+    .filter(data => 
+      data.curated || 
+      (showNonCurated && !data.curated && data.submitted_for_curation) 
+    )
+    .filter(data => !selectedInstitution || data.institution === selectedInstitution)
+    .sort((a, b) => {
+      // Convert resnum to numbers for comparison, assuming they are stored as strings
+      const resnumA = a.resnum === 'X' ? -1 : parseInt(a.resnum, 10);
+      const resnumB = b.resnum === 'X' ? -1 : parseInt(b.resnum, 10);
+  
+      // First, sort by resnum in ascending order
+      if (resnumA !== resnumB) {
+        return resnumA - resnumB;
+      }
+  
+      // If resnum is the same, sort by resmut in ascending order
+      // Assuming resmut are strings and can be directly compared
+      return a.resmut.localeCompare(b.resmut);
+    });
 
-
+    const getVariantDisplay = (resid: any, resnum: any, resmut: any) => {
+      if (resid === 'X') {
+        return 'WT';
+      }
+        
+      // Find the corresponding sequence data entry
+      const sequenceEntry = sequences.find(seq => seq.resid === resid && seq.Rosetta_resnum === parseInt(resnum, 10));
+        
+      // Determine the correct resnum based on the checkbox state
+      const correctResnum = useRosettaNumbering ? sequenceEntry?.Rosetta_resnum : sequenceEntry?.PDBresnum || resnum;
+        
+      const variant = `${resid}${correctResnum}${resmut}`;
+      return variant;
+    };
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -67,8 +102,8 @@ const DataPage = () => {
         <label className="block mb-2">
           <input
             type="checkbox"
-            checked={includeNonCurated}
-            onChange={() => setIncludeNonCurated(!includeNonCurated)}
+            checked={showNonCurated}
+            onChange={(e) => setShowNonCurated(e.target.checked)}
             className="mr-2"
           />
           Include noncurated data
@@ -84,7 +119,7 @@ const DataPage = () => {
           >
             <option value="">Select an institution</option>
             {institutions.map((institution) => (
-              <option key={institution.id} value={institution.id}>
+              <option key={institution.id} value={institution.abbr}>
                 {institution.fullname}
               </option>
             ))}
@@ -92,7 +127,7 @@ const DataPage = () => {
         </label>
       </div>
       <div className="mb-4 font-bold">
-        {recordsFound} Records Found
+      {filteredData.length} Records Found
       </div>
       <div>
         <label className="block">
@@ -106,30 +141,30 @@ const DataPage = () => {
         </label>
       </div>
       <div className="flex flex-col items-center p-4">
-        <table className="table-auto">
+        <table className="table-auto border-collapse border border-gray-400">
           <thead>
             <tr>
-              <th>Variant</th>
-              <th>Yield</th>
-              <th>Km</th>
-              <th>Kcat</th>
-              <th>Kcat/Km</th>
-              <th>T50</th>
-              <th>Tm</th>
-              <th>Rosetta Score Change</th>
+              <th className="border border-gray-300">Variant</th>
+              <th className="border border-gray-300">Yield</th>
+              <th className="border border-gray-300">Km</th>
+              <th className="border border-gray-300">Kcat</th>
+              <th className="border border-gray-300">Kcat/Km</th>
+              <th className="border border-gray-300">T50</th>
+              <th className="border border-gray-300">Tm</th>
+              <th className="border border-gray-300">Rosetta Score Change</th>
             </tr>
           </thead>
           <tbody>
-            {characterizationData.map((data, index) => (
+            {filteredData.map((data, index) => (
               <tr key={index}>
-                <td>{getVariantDisplay(data.resid, data.resnum, data.resmut)}</td>
-                <td>{data.yield_avg}</td>
-                <td>{data.KM_avg}</td>
-                <td>{data.kcat_avg}</td>
-                <td>{data.kcat_over_KM}</td>
-                <td>{data.T50}</td>
-                <td>{data.Tm}</td>
-                <td>{data.Rosetta_score}</td>
+                <td className="border border-gray-300">{getVariantDisplay(data.resid, data.resnum, data.resmut)}</td>
+                <td className="border border-gray-300">{data.yield_avg}</td>
+                <td className="border border-gray-300">{data.KM_avg}</td>
+                <td className="border border-gray-300">{data.kcat_avg}</td>
+                <td className="border border-gray-300">{data.kcat_over_KM}</td>
+                <td className="border border-gray-300">{data.T50}</td>
+                <td className="border border-gray-300">{data.Tm}</td>
+                <td className="border border-gray-300">{data.Rosetta_score}</td>
               </tr>
             ))}
           </tbody>

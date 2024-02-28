@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client_users' // Adjust the import path based on your setup
+import { PrismaClient } from '../../../prisma/generated/client_users';
 
 const prisma = new PrismaClient()
 
@@ -8,6 +8,7 @@ export default async function handler(req:any, res:any) {
       select: {
         id: true,
         fullname: true,
+        abbr: true,
       },
     })
     res.status(200).json(institutions)
