@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CharacterizationData } from '../../../prisma/generated/client_proteins/index';
 import "../../app/globals.css";
 
 const DataPage = () => {
@@ -11,7 +12,7 @@ const DataPage = () => {
   const [characterizationData, setCharacterizationData] = useState<any[]>([]);
 
   // Placeholder for the number of records found
-  const recordsFound = 123; // Placeholder value
+  const recordsFound = 222; // Placeholder value
 
   useEffect(() => {
     const fetchInstitutions = async () => {
@@ -34,8 +35,13 @@ const DataPage = () => {
     const variant = `${resid}${resnum}${resmut}`;
     return variant === 'X0X' ? 'WT' : variant;
   };
+  
+  const roundTo = (number:number, decPlaces:number) => {
+    const factor = Math.pow(10, decPlaces);
+    return Math.round(number * factor)/factor;
+  };
 
-
+  //function taking in array from `data` and rounding
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -123,13 +129,13 @@ const DataPage = () => {
             {characterizationData.map((data, index) => (
               <tr key={index}>
                 <td>{getVariantDisplay(data.resid, data.resnum, data.resmut)}</td>
-                <td>{data.yield_avg}</td>
-                <td>{data.KM_avg}</td>
-                <td>{data.kcat_avg}</td>
-                <td>{data.kcat_over_KM}</td>
-                <td>{data.T50}</td>
-                <td>{data.Tm}</td>
-                <td>{data.Rosetta_score}</td>
+                <td>{roundTo(data.yield_avg, 2)}</td>
+                <td>{`${roundTo(data.KM_avg, 2)} ± ${roundTo(data.KM_SD, 2)}`}</td>
+                <td>{`${roundTo(data.kcat_avg, 1)} ± ${roundTo(data.kcat_SD, 1)}`}</td>
+                <td>{`${roundTo(data.kcat_over_KM, 2)} ± ${roundTo(data.kcat_over_KM_SD, 2)}`}</td>
+                <td>{`${roundTo(data.T50, 1)} ± ${roundTo(data.T50_SD, 1)}`}</td>
+                <td>{`${roundTo(data.Tm, 1)} ± ${roundTo(data.Tm_SD, 1)}`}</td>
+                <td>{roundTo(data.Rosetta_score, 1)}</td>
               </tr>
             ))}
           </tbody>
