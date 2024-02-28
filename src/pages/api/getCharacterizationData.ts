@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client_proteins'; // Adjust the import path based on your setup
+import { PrismaClient } from '../../../prisma/generated/client_proteins'; 
 
 const prisma = new PrismaClient();
 
