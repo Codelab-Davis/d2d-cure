@@ -59,117 +59,17 @@ const DataPage = () => {
     fetchData();
   }, []);
 
-  const filteredData = characterizationData
-    .filter(data => 
-      data.curated || 
-      (showNonCurated && !data.curated && data.submitted_for_curation) 
-    )
-    .filter(data => !selectedInstitution || data.institution === selectedInstitution)
-    .sort((a, b) => {
-      // Convert resnum to numbers for comparison, assuming they are stored as strings
-      const resnumA = a.resnum === 'X' ? -1 : parseInt(a.resnum, 10);
-      const resnumB = b.resnum === 'X' ? -1 : parseInt(b.resnum, 10);
+  const getVariantDisplay = (resid:any, resnum:any, resmut:any) => {
+    const variant = `${resid}${resnum}${resmut}`;
+    return variant === 'X0X' ? 'WT' : variant;
+  };
   
-      // First, sort by resnum in ascending order
-      if (resnumA !== resnumB) {
-        return resnumA - resnumB;
-      }
-  
-      // If resnum is the same, sort by resmut in ascending order
-      return a.resmut.localeCompare(b.resmut);
-    });
+  const roundTo = (number:number, decPlaces:number) => {
+    const factor = Math.pow(10, decPlaces);
+    return Math.round(number * factor)/factor;
+  };
 
-    const getVariantDisplay = (resid: any, resnum: any, resmut: any) => {
-      if (resid === 'X') {
-        return 'WT';
-      }
-        
-      // You can't just subtract 3 from the rosetta num to get the PBD num. You have to perform the lookup on the Sequence table
-      const sequenceEntry = sequences.find(seq => seq.resid === resid && seq.Rosetta_resnum === parseInt(resnum, 10));
-      const correctResnum = useRosettaNumbering ? sequenceEntry?.Rosetta_resnum : sequenceEntry?.PDBresnum || resnum;
-        
-      const variant = `${resid}${correctResnum}${resmut}`;
-      return variant;
-    };
-
-    const roundTo = (number:number, decPlaces:number) => {
-      if (number === null) {
-        return null; 
-      }
-      const factor = Math.pow(10, decPlaces);
-      return (Math.round(number * factor) / factor).toFixed(decPlaces);
-    };
-
-    const getGroupKey = (data:any) => {
-      // This function defines how we collapse the data (in this case, if variant is the same)
-      return `${data.resid}${data.resnum}${data.resmut}`;
-    };
-    
-    let displayData = []; // This will be the data we actually render. Needed for averaged/collapsed view
-    if (expandData) {
-      displayData = filteredData; // Use the data as-is for expanded view
-    } else {
-      const groupedData:any = {};
-      filteredData.forEach(data => {
-        const key = getGroupKey(data);
-        if (!groupedData[key]) {
-          groupedData[key] = []; 
-        }
-        groupedData[key].push(data);
-      });
-    
-      // NOTE: we are mutating the original data. So if you want to access NON NUMERICAL COLUMNS from here on out (like expressed, which is a boolean), define them here or it won't work 
-      displayData = Object.values(groupedData).map((group: any) => {
-        const averageRow: any = {
-          resid: group[0].resid,
-          resnum: group[0].resnum,
-          resmut: group[0].resmut,
-          isAggregate: group.length > 1,
-          count: group.length, 
-          expressed: group.some((item: any) => item.expressed)
-        };
-      
-        const sums: any = {};
-        const counts: any = {};
-      
-        group.forEach((item: any) => {
-          Object.keys(item).forEach(key => {
-            if (typeof item[key] === 'number') {
-              if (!sums[key]) {
-                sums[key] = 0;
-                counts[key] = 0;
-              }
-              if (item[key] !== null) { 
-                sums[key] += item[key];
-                counts[key]++;
-              }
-            }
-          });
-        });
-      
-        Object.keys(sums).forEach(key => {
-          averageRow[key] = counts[key] > 0 ? sums[key] / counts[key] : null; 
-        });
-      
-        return averageRow;
-      });
-    }
-
-    const getColorForValue = (value:any) => {
-      if (value < -4.75) return '#36929A';
-      else if (value < -4.25) return '#4A9DA4';
-      else if (value < -3.75) return '#5EA8AE';
-      else if (value < -3.25) return '#72B2B8';
-      else if (value < -2.75) return '#86BDC2';
-      else if (value < -2.25) return '#9AC8CC';
-      else if (value < -1.75) return '#AAD3D6';
-      else if (value < -1.25) return '#C2DEE0';
-      else if (value < -0.75) return '#D7E9EB';
-      else if (value < -0.25) return '#EBF4F5';
-      else if (value > 0.25 && value <= 0.75) return '#FAC498';
-      else if (value > 0.75) return '#F68932';
-      else return '#FFFFFF'; 
-    };
+  //function taking in array from `data` and rounding
 
   return (
     <div className="flex flex-col items-center p-4">
