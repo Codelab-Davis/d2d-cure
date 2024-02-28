@@ -75,6 +75,11 @@ const DataPage = () => {
       return variant;
     };
 
+    const roundTo = (number:number, decPlaces:number) => {
+      const factor = Math.pow(10, decPlaces);
+      return Math.round(number * factor)/factor;
+    };
+
   return (
     <div className="flex flex-col items-center p-4">
       <h1 className="text-xl font-bold mb-4">BglB Variant Characterization Data</h1>
@@ -161,13 +166,13 @@ const DataPage = () => {
             {filteredData.map((data, index) => (
               <tr key={index}>
                 <td className="border border-gray-300">{getVariantDisplay(data.resid, data.resnum, data.resmut)}</td>
-                <td className="border border-gray-300">{data.yield_avg}</td>
-                <td className="border border-gray-300">{data.KM_avg}</td>
-                <td className="border border-gray-300">{data.kcat_avg}</td>
-                <td className="border border-gray-300">{data.kcat_over_KM}</td>
-                <td className="border border-gray-300">{data.T50}</td>
-                <td className="border border-gray-300">{data.Tm}</td>
-                <td className="border border-gray-300">{data.Rosetta_score}</td>
+                <td className="border border-gray-300">{roundTo(data.yield_avg, 2)}</td>
+                <td className="border border-gray-300">{`${roundTo(data.KM_avg, 2)} ± ${roundTo(data.KM_SD, 2)}`}</td>
+                <td className="border border-gray-300">{`${roundTo(data.kcat_avg, 1)} ± ${roundTo(data.kcat_SD, 1)}`}</td>
+                <td className="border border-gray-300">{`${roundTo(data.kcat_over_KM, 2)} ± ${roundTo(data.kcat_over_KM_SD, 2)}`}</td>
+                <td className="border border-gray-300">{`${roundTo(data.T50, 1)} ± ${roundTo(data.T50_SD, 1)}`}</td>
+                <td className="border border-gray-300">{`${roundTo(data.Tm, 1)} ± ${roundTo(data.Tm_SD, 1)}`}</td>
+                <td className="border border-gray-300">{roundTo(data.Rosetta_score, 1)}</td>
               </tr>
             ))}
           </tbody>
