@@ -4,13 +4,12 @@ import "../../app/globals.css";
 const DataPage = () => {
   const [expandData, setExpandData] = useState(false);
   const [useRosettaNumbering, setUseRosettaNumbering] = useState(false);
-  const [includeNonCurated, setIncludeNonCurated] = useState(false);
+  const [sequences, setSequences] = useState<any[]>([]);
+  const [showNonCurated, setShowNonCurated] = useState(false); 
+  const [institutions, setInstitutions] = useState<any[]>([]);
   const [selectedInstitution, setSelectedInstitution] = useState('');
   const [residueNumber, setResidueNumber] = useState('');
-  const [institutions, setInstitutions] = useState<any[]>([]);
-  const [characterizationData, setCharacterizationData] = useState<any[]>([]);
-  const [showNonCurated, setShowNonCurated] = useState(false); 
-  const [sequences, setSequences] = useState<any[]>([]);
+  const [characterizationData, setCharacterizationData] = useState<any[]>([]); // This holds all the rows in the CharacterizationData table in the BglB database
 
 
   useEffect(() => {
@@ -53,7 +52,6 @@ const DataPage = () => {
       }
   
       // If resnum is the same, sort by resmut in ascending order
-      // Assuming resmut are strings and can be directly compared
       return a.resmut.localeCompare(b.resmut);
     });
 
@@ -73,9 +71,65 @@ const DataPage = () => {
     };
 
     const roundTo = (number:number, decPlaces:number) => {
+      if (number === null) {
+        return null; 
+      }
       const factor = Math.pow(10, decPlaces);
-      return Math.round(number * factor)/factor;
+      return (Math.round(number * factor) / factor).toFixed(decPlaces);
     };
+
+    const getGroupKey = (data:any) => {
+      // This function defines how we collapse the data (in this case, if variant is the same)
+      return `${data.resid}${data.resnum}${data.resmut}`;
+    };
+    
+    let displayData = []; // This will be the data we actually render. Needed for averaged/collapsed view
+    if (expandData) {
+      displayData = filteredData; // Use the data as-is for expanded view
+    } else {
+      const groupedData:any = {};
+      filteredData.forEach(data => {
+        const key = getGroupKey(data);
+        if (!groupedData[key]) {
+          groupedData[key] = []; 
+        }
+        groupedData[key].push(data);
+      });
+    
+      displayData = Object.values(groupedData).map((group: any) => {
+        const averageRow: any = {
+          resid: group[0].resid,
+          resnum: group[0].resnum,
+          resmut: group[0].resmut,
+          isAggregate: group.length > 1,
+          count: group.length
+        };
+      
+        const sums: any = {};
+        const counts: any = {};
+      
+        group.forEach((item: any) => {
+          Object.keys(item).forEach(key => {
+            if (typeof item[key] === 'number') {
+              if (!sums[key]) {
+                sums[key] = 0;
+                counts[key] = 0;
+              }
+              if (item[key] !== null) { 
+                sums[key] += item[key];
+                counts[key]++;
+              }
+            }
+          });
+        });
+      
+        Object.keys(sums).forEach(key => {
+          averageRow[key] = counts[key] > 0 ? sums[key] / counts[key] : null; 
+        });
+      
+        return averageRow;
+      });
+    }
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -90,7 +144,7 @@ const DataPage = () => {
           <input
             type="checkbox"
             checked={expandData}
-            onChange={() => setExpandData(!expandData)}
+            onChange={(e) => setExpandData(e.target.checked)}
             className="mr-2"
           />
           Expand data to show individual instead of averages
@@ -132,7 +186,7 @@ const DataPage = () => {
         </label>
       </div>
       <div className="mb-4 font-bold">
-      {filteredData.length} Records Found
+      {displayData.length} Records Found
       </div>
       <div>
         <label className="block">
@@ -160,17 +214,17 @@ const DataPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((data, index) => (
+            {displayData.map((data, index) => (
               <tr key={index}>
-                <td className="border border-gray-300">{getVariantDisplay(data.resid, data.resnum, data.resmut)}</td>
-                <td className="border border-gray-300">{roundTo(data.yield_avg, 2)}</td>
-                <td className="border border-gray-300">{`${roundTo(data.KM_avg, 2)} ± ${roundTo(data.KM_SD, 2)}`}</td>
-                <td className="border border-gray-300">{`${roundTo(data.kcat_avg, 1)} ± ${roundTo(data.kcat_SD, 1)}`}</td>
-                <td className="border border-gray-300">{`${roundTo(data.kcat_over_KM, 2)} ± ${roundTo(data.kcat_over_KM_SD, 2)}`}</td>
-                <td className="border border-gray-300">{`${roundTo(data.T50, 1)} ± ${roundTo(data.T50_SD, 1)}`}</td>
-                <td className="border border-gray-300">{`${roundTo(data.Tm, 1)} ± ${roundTo(data.Tm_SD, 1)}`}</td>
-                <td className="border border-gray-300">{roundTo(data.Rosetta_score, 1)}</td>
-              </tr>
+              <td className="border border-gray-300">{data.isAggregate ? (<span title={`Average of ${data.count} separate experiments. Click to expand`} className="text-blue-500" onClick={() => setExpandData(true)} style={{cursor: 'pointer'}}>►</span>) : ''}{getVariantDisplay(data.resid, data.resnum, data.resmut)}</td>
+              <td className="border border-gray-300">{data.yield_avg !== null && !isNaN(data.yield_avg) ? roundTo(data.yield_avg, 2) : '—'}</td>
+              <td className="border border-gray-300">{data.KM_avg !== null && !isNaN(data.KM_avg) ? `${roundTo(data.KM_avg, 2)} ± ${data.KM_SD !== null && !isNaN(data.KM_SD) ? roundTo(data.KM_SD, 2) : '—'}` : '—'}</td>
+              <td className="border border-gray-300">{data.kcat_avg !== null && !isNaN(data.kcat_avg) ? `${roundTo(data.kcat_avg, 1)} ± ${data.kcat_SD !== null && !isNaN(data.kcat_SD) ? roundTo(data.kcat_SD, 1) : '—'}` : '—'}</td>
+              <td className="border border-gray-300">{data.kcat_over_KM !== null && !isNaN(data.kcat_over_KM) ? `${roundTo(data.kcat_over_KM, 2)} ± ${data.kcat_over_KM_SD !== null && !isNaN(data.kcat_over_KM_SD) ? roundTo(data.kcat_over_KM_SD, 2) : '—'}` : '—'}</td>
+              <td className="border border-gray-300">{data.T50 !== null && !isNaN(data.T50) ? `${roundTo(data.T50, 1)} ± ${data.T50_SD !== null && !isNaN(data.T50_SD) ? roundTo(data.T50_SD, 1) : '—'}` : '—'}</td>
+              <td className="border border-gray-300">{data.Tm !== null && !isNaN(data.Tm) ? `${roundTo(data.Tm, 1)} ± ${data.Tm_SD !== null && !isNaN(data.Tm_SD) ? roundTo(data.Tm_SD, 1) : '—'}` : '—'}</td>
+              <td className="border border-gray-300">{data.Rosetta_score !== null && !isNaN(data.Rosetta_score) ? roundTo(data.Rosetta_score, 1) : '—'}</td>
+            </tr>
             ))}
           </tbody>
         </table>
