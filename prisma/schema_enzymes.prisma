@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "./generated/client_enzymes"
+  binaryTargets = ["native", "darwin"]
 }
 
 datasource db {

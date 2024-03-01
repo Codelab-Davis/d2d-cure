@@ -7,6 +7,13 @@ export default function Home() {
       <Link href="/data">
         <button>Go to Data Page</button>
       </Link>
+      
+      <div>
+    <Link href="/graph-test">
+      <button>Go to Graph Page</button>
+    </Link>
+  </div>
+  
     </div>
   );
 }
