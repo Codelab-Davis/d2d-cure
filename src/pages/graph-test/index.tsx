@@ -1,44 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import "../../app/globals.css";
-
-const DataPage = () => {
-  const [expandData, setExpandData] = useState(false);
-  const [useRosettaNumbering, setUseRosettaNumbering] = useState(false);
-  const [includeNonCurated, setIncludeNonCurated] = useState(false);
-  const [selectedInstitution, setSelectedInstitution] = useState('');
-  const [residueNumber, setResidueNumber] = useState('');
-  const [institutions, setInstitutions] = useState<any[]>([]);
-  const [characterizationData, setCharacterizationData] = useState<any[]>([]);
-
-  // Placeholder for the number of records found
-  const recordsFound = 123; // Placeholder value
-
-  useEffect(() => {
-    const fetchInstitutions = async () => {
-      const response = await fetch('/api/getInstitutions');
-      const data = await response.json();
-      const sortedData = data.sort((a:any, b:any) => a.fullname.localeCompare(b.fullname));
-      setInstitutions(sortedData);
-    };
-    const fetchData = async () => {
-      const response = await fetch('/api/getCharacterizationData');
-      const data = await response.json();
-      setCharacterizationData(data);
-    };
-
-    fetchInstitutions();
-    fetchData();
-  }, []);
-
-
-
-
+function GraphImage() {
+  // URL of your Flask route
+  const flaskImageUrl = 'http://127.0.0.1:5000/plot';
 
   return (
     <div>
-      <label >graph page</label>
+      <h2>test graph</h2>
+      <img src={flaskImageUrl}/>
     </div>
   );
-};
+}
 
-export default DataPage;
+export default GraphImage;
