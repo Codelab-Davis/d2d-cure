@@ -15,14 +15,6 @@ CORS(app)
 
 
 
-
-
-
-
-
-
-
-
 # Turn debug mode on or off
 debug_mode = False
 
@@ -47,10 +39,15 @@ def plotit():
             log_file.write("\nSTART LOG\n")
 
 
-
-
+    print("DEBUG")
+    variant_name = request.form['variant-name']
+    
     if 'file' not in request.files:
         return 'No file part', 400
+    
+    # if 'variant-name' not in request.data:
+    #     return 'no variant-name', 400
+    
     file = request.files['file']
     if file.filename == '':
         return 'No selected file', 400
@@ -278,7 +275,7 @@ def plotit():
 
         plot(c_substrate, kobs, 'bo')  # Plot raw data with blue circles.
 
-        title('placeholder name2', fontsize='20')
+        title(variant_name, fontsize='20')
         ylabel(r'$\mathit{k}_{\mathrm{obs}}$ (min$^{-1}$)', fontsize='16')
         xlabel('[S] (mᴍ)', fontsize='16')
         legend(fontsize='12', loc='lower right')
@@ -293,7 +290,7 @@ def plotit():
 
         plot(c_substrate, kobs, "bo")  # Plot raw data with blue circles.
 
-        title('placeholder name2' + ' (linear curve fit)', fontsize='20')
+        title(variant_name + ' (linear curve fit)', fontsize='20')
         ylabel(r'$\mathit{k}_{\mathrm{obs}}$ (min$^{-1}$)', fontsize='16')
         xlabel('[S] (mᴍ)', fontsize='16')
         legend(fontsize='12')
