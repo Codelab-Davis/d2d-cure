@@ -8,7 +8,7 @@ const DataPage = () => {
   const [showNonCurated, setShowNonCurated] = useState(false); 
   const [institutions, setInstitutions] = useState<any[]>([]);
   const [selectedInstitution, setSelectedInstitution] = useState('');
-  const [residueNumber, setResidueNumber] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [characterizationData, setCharacterizationData] = useState<any[]>([]); // This holds all the rows in the CharacterizationData table in the BglB database
   const [WTValues, setWTValues] = useState<any>(null);
 
@@ -62,6 +62,22 @@ const DataPage = () => {
       (showNonCurated && !data.curated && data.submitted_for_curation) 
     )
     .filter(data => !selectedInstitution || data.institution === selectedInstitution)
+    .filter(data => {
+      if (!searchTerm.trim()) return true;
+  
+      // Determine the correct number to use based on the useRosettaNumbering state
+      let numberToCompare = data.resnum.toString(); // Default to Rosetta numbering
+  
+      if (!useRosettaNumbering) {
+        // If Rosetta numbering is off, find the corresponding PDB number
+        const sequenceEntry = sequences.find(seq => seq.Rosetta_resnum === data.resnum);
+        if (sequenceEntry) {
+          numberToCompare = sequenceEntry.PDBresnum.toString();
+        }
+      }
+      // Now compare the correct number with the search term
+      return numberToCompare.includes(searchTerm.trim());
+    })
     .sort((a, b) => {
       // Convert resnum to numbers for comparison, assuming they are stored as strings
       const resnumA = a.resnum === 'X' ? -1 : parseInt(a.resnum, 10);
@@ -227,11 +243,11 @@ const DataPage = () => {
       </div>
       <div>
         <label className="block">
-          Jump to residue number:{' '}
+          Search for residue number:{' '}
           <input
             type="number"
-            value={residueNumber}
-            onChange={(e) => setResidueNumber(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="mt-1"
           />
         </label>
