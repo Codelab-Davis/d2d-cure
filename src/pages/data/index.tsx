@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { CharacterizationData } from '../../../prisma/generated/client_proteins/index';
 import "../../app/globals.css";
 
 const DataPage = () => {
@@ -9,9 +8,11 @@ const DataPage = () => {
   const [showNonCurated, setShowNonCurated] = useState(false); 
   const [institutions, setInstitutions] = useState<any[]>([]);
   const [selectedInstitution, setSelectedInstitution] = useState('');
-  const [residueNumber, setResidueNumber] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [characterizationData, setCharacterizationData] = useState<any[]>([]); // This holds all the rows in the CharacterizationData table in the BglB database
   const [WTValues, setWTValues] = useState<any>(null);
+  const [lastClickedColumn, setLastClickedColumn] = useState<{ name: string; count: number } | null>(null);
+
 
 
   useEffect(() => {
@@ -63,6 +64,22 @@ const DataPage = () => {
       (showNonCurated && !data.curated && data.submitted_for_curation) 
     )
     .filter(data => !selectedInstitution || data.institution === selectedInstitution)
+    .filter(data => {
+      if (!searchTerm.trim()) return true;
+  
+      // Determine the correct number to use based on the useRosettaNumbering state
+      let numberToCompare = data.resnum.toString(); // Default to Rosetta numbering
+  
+      if (!useRosettaNumbering) {
+        // If Rosetta numbering is off, find the corresponding PDB number
+        const sequenceEntry = sequences.find(seq => seq.Rosetta_resnum === data.resnum);
+        if (sequenceEntry) {
+          numberToCompare = sequenceEntry.PDBresnum.toString();
+        }
+      }
+      // Now compare the correct number with the search term
+      return numberToCompare.includes(searchTerm.trim());
+    })
     .sort((a, b) => {
       // Convert resnum to numbers for comparison, assuming they are stored as strings
       const resnumA = a.resnum === 'X' ? -1 : parseInt(a.resnum, 10);
@@ -90,84 +107,103 @@ const DataPage = () => {
       return variant;
     };
 
-    const roundTo = (number:number, decPlaces:number) => {
-      if (number === null) {
-        return null; 
-      }
-      const factor = Math.pow(10, decPlaces);
-      return (Math.round(number * factor) / factor).toFixed(decPlaces);
-    };
+  const onColumnHeaderClick = (columnName: string) => {
+    setLastClickedColumn((prevState) => {
+      // If it's the same column, increment the count, otherwise reset
+      const isSameColumn = prevState && prevState.name === columnName;
+      const nextCount = isSameColumn ? prevState.count + 1 : 1;
 
-    const getGroupKey = (data:any) => {
-      // This function defines how we collapse the data (in this case, if variant is the same)
-      return `${data.resid}${data.resnum}${data.resmut}`;
-    };
-    
-    let displayData = []; // This will be the data we actually render. Needed for averaged/collapsed view
-    if (expandData) {
-      displayData = filteredData; // Use the data as-is for expanded view
-    } else {
-      const groupedData:any = {};
-      filteredData.forEach(data => {
-        const key = getGroupKey(data);
-        if (!groupedData[key]) {
-          groupedData[key] = []; 
-        }
-        groupedData[key].push(data);
-      });
-    
-      // NOTE: we are mutating the original data. So if you want to access NON NUMERICAL COLUMNS from here on out (like expressed, which is a boolean), define them here or it won't work 
-      displayData = Object.values(groupedData).map((group: any) => {
-        const averageRow: any = {
-          resid: group[0].resid,
-          resnum: group[0].resnum,
-          resmut: group[0].resmut,
-          isAggregate: group.length > 1,
-          count: group.length, 
-          expressed: group.some((item: any) => item.expressed)
-        };
-      
-        const sums: any = {};
-        const counts: any = {};
-      
-        group.forEach((item: any) => {
-          Object.keys(item).forEach(key => {
-            if (typeof item[key] === 'number') {
-              if (!sums[key]) {
-                sums[key] = 0;
-                counts[key] = 0;
-              }
-              if (item[key] !== null) { 
-                sums[key] += item[key];
-                counts[key]++;
-              }
-            }
-          });
-        });
-      
-        Object.keys(sums).forEach(key => {
-          averageRow[key] = counts[key] > 0 ? sums[key] / counts[key] : null; 
-        });
-      
-        return averageRow;
-      });
+      // Log based on the count
+      let order = "Ascending Order"; // Default for the first click
+      if (nextCount === 2) order = "Descending Order";
+      else if (nextCount === 3) order = "Original Order";
+
+      console.log(`${columnName} sorted in ${order}`);
+
+      // Return the new state
+      return { name: columnName, count: nextCount % 3 }; // Reset to 0 after reaching 3
+    });
+  };
+  
+
+  const roundTo = (number:number, decPlaces:number) => {
+    if (number === null) {
+      return null; 
     }
+    const factor = Math.pow(10, decPlaces);
+    return (Math.round(number * factor) / factor).toFixed(decPlaces);
+  };
 
-    const getColorForValue = (value:any) => {
-      if (value < -4.75) return '#36929A';
-      else if (value < -4.25) return '#4A9DA4';
-      else if (value < -3.75) return '#5EA8AE';
-      else if (value < -3.25) return '#72B2B8';
-      else if (value < -2.75) return '#86BDC2';
-      else if (value < -2.25) return '#9AC8CC';
-      else if (value < -1.75) return '#AAD3D6';
-      else if (value < -1.25) return '#C2DEE0';
-      else if (value < -0.75) return '#D7E9EB';
-      else if (value < -0.25) return '#EBF4F5';
-      else if (value > 0.25 && value <= 0.75) return '#FAC498';
-      else if (value > 0.75) return '#F68932';
-      else return '#FFFFFF'; 
-    };
+  const getGroupKey = (data:any) => {
+    // This function defines how we collapse the data (in this case, if variant is the same)
+    return `${data.resid}${data.resnum}${data.resmut}`;
+  };
+  
+  let displayData = []; // This will be the data we actually render. Needed for averaged/collapsed view
+  if (expandData) {
+    displayData = filteredData; // Use the data as-is for expanded view
+  } else {
+    const groupedData:any = {};
+    filteredData.forEach(data => {
+      const key = getGroupKey(data);
+      if (!groupedData[key]) {
+        groupedData[key] = []; 
+      }
+      groupedData[key].push(data);
+    });
+  
+    // NOTE: we are mutating the original data. So if you want to access NON NUMERICAL COLUMNS from here on out (like expressed, which is a boolean), define them here or it won't work 
+    displayData = Object.values(groupedData).map((group: any) => {
+      const averageRow: any = {
+        resid: group[0].resid,
+        resnum: group[0].resnum,
+        resmut: group[0].resmut,
+        isAggregate: group.length > 1,
+        count: group.length, 
+        expressed: group.some((item: any) => item.expressed)
+      };
+    
+      const sums: any = {};
+      const counts: any = {};
+    
+      group.forEach((item: any) => {
+        Object.keys(item).forEach(key => {
+          if (typeof item[key] === 'number') {
+            if (!sums[key]) {
+              sums[key] = 0;
+              counts[key] = 0;
+            }
+            if (item[key] !== null) { 
+              sums[key] += item[key];
+              counts[key]++;
+            }
+          }
+        });
+      });
+    
+      Object.keys(sums).forEach(key => {
+        averageRow[key] = counts[key] > 0 ? sums[key] / counts[key] : null; 
+      });
+    
+      return averageRow;
+    });
+  }
+
+  const getColorForValue = (value:any) => {
+    if (value < -4.75) return '#36929A';
+    else if (value < -4.25) return '#4A9DA4';
+    else if (value < -3.75) return '#5EA8AE';
+    else if (value < -3.25) return '#72B2B8';
+    else if (value < -2.75) return '#86BDC2';
+    else if (value < -2.25) return '#9AC8CC';
+    else if (value < -1.75) return '#AAD3D6';
+    else if (value < -1.25) return '#C2DEE0';
+    else if (value < -0.75) return '#D7E9EB';
+    else if (value < -0.25) return '#EBF4F5';
+    else if (value > 0.25 && value <= 0.75) return '#FAC498';
+    else if (value > 0.75) return '#F68932';
+    else return '#FFFFFF'; 
+  };
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -228,11 +264,11 @@ const DataPage = () => {
       </div>
       <div>
         <label className="block">
-          Jump to residue number:{' '}
+          Search for residue number:{' '}
           <input
             type="number"
-            value={residueNumber}
-            onChange={(e) => setResidueNumber(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="mt-1"
           />
         </label>
@@ -241,14 +277,14 @@ const DataPage = () => {
         <table className="table-auto border-collapse border border-gray-400">
           <thead>
             <tr>
-              <th className="border border-gray-300">Variant</th>
-              <th className="border border-gray-300">Yield</th>
-              <th className="border border-gray-300">Km</th>
-              <th className="border border-gray-300">Kcat</th>
-              <th className="border border-gray-300">Kcat/Km</th>
-              <th className="border border-gray-300">T50</th>
-              <th className="border border-gray-300">Tm</th>
-              <th className="border border-gray-300">Rosetta Score Change</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Variant')}>Variant</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Yield')}>Yield</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Km')}>Km</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Kcat')}>Kcat</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Kcat/Km')}>Kcat/Km</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('T50')}>T50</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Tm')}>Tm</th>
+              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Rosetta Score Change')}>Rosetta Score Change</th>
             </tr>
           </thead>
           <tbody>

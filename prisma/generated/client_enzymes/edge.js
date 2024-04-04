@@ -127,7 +127,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Hussain\\Desktop\\D2D\\prisma\\generated\\client_enzymes",
+      "value": "/Users/vikramkarmarkar/Desktop/CodeLab/D2D_Project/d2d-cure/prisma/generated/client_enzymes",
       "fromEnvVar": null
     },
     "config": {
@@ -136,7 +136,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
@@ -144,7 +144,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../..",
   "clientVersion": "5.9.1",
