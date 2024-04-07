@@ -31,12 +31,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.9.1
- * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
+ * Prisma Client JS version: 5.10.2
+ * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
  */
 Prisma.prismaVersion = {
-  client: "5.9.1",
-  engine: "23fdc5965b1e05fc54e5f26ed3de66776b93de64"
+  client: "5.10.2",
+  engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -127,7 +127,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Hussain\\Desktop\\D2D\\prisma\\generated\\client_enzymes",
+      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_enzymes",
       "fromEnvVar": null
     },
     "config": {
@@ -144,11 +144,11 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../..",
-  "clientVersion": "5.9.1",
-  "engineVersion": "23fdc5965b1e05fc54e5f26ed3de66776b93de64",
+  "clientVersion": "5.10.2",
+  "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
   "datasourceNames": [
     "db"
   ],
@@ -162,15 +162,15 @@ const config = {
       }
     }
   },
-  "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKICBvdXRwdXQgICA9ICIuL2dlbmVyYXRlZC9jbGllbnRfZW56eW1lcyIKfQoKZGF0YXNvdXJjZSBkYiB7CiAgcHJvdmlkZXIgPSAibXlzcWwiCiAgdXJsICAgICAgPSAibXlzcWw6Ly9hZG1pbjpoZWxsb3RoZXJlQGQyZGRiLmNreGpkZDRldzZjcC51cy1lYXN0LTIucmRzLmFtYXpvbmF3cy5jb206MzMwNi9lbnp5bWVzIgp9Cgptb2RlbCBHZW5lcmFsSW5mbyB7CiAgaWQgICAgICAgICAgICAgIEludCAgICAgQGlkIEBkZWZhdWx0KGF1dG9pbmNyZW1lbnQoKSkgQGRiLlVuc2lnbmVkVGlueUludAogIGFiYnIgICAgICAgICAgICBTdHJpbmcgIEBkYi5WYXJDaGFyKDQpCiAgZnVsbF9uYW1lICAgICAgIFN0cmluZyAgQGRiLlRpbnlUZXh0CiAgeWVhciAgICAgICAgICAgIEludCAgICAgQGRiLlllYXIKICBzcGVjaWVzICAgICAgICAgU3RyaW5nICBAZGIuVGlueVRleHQKICBFQ19udW1iZXIgICAgICAgU3RyaW5nICBAZGIuVmFyQ2hhcigxNCkKICBVbmlQcm90X251bWJlciAgU3RyaW5nICBAZGIuVmFyQ2hhcigxMCkKICBQREJfZW50cmllcyAgICAgU3RyaW5nPyBAZGIuVGlueVRleHQKICBtb2xhcl9tYXNzICAgICAgSW50ICAgICBAZGIuVW5zaWduZWRNZWRpdW1JbnQKICBleHRfY29lZmZpY2llbnQgSW50ICAgICBAZGIuVW5zaWduZWRNZWRpdW1JbnQKICBwYXRod2F5X2Rlc2MgICAgU3RyaW5nICBAZGIuVGV4dAogIGFzc2F5X2Rlc2MgICAgICBTdHJpbmcgIEBkYi5UZXh0Cn0K",
-  "inlineSchemaHash": "6e478065b4889e11d061a0d7eec245a852ff7cc284807d54415adbdc3891f2ee",
-  "noEngine": false
+  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  output   = \"./generated/client_enzymes\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/enzymes\"\r\n}\r\n\r\nmodel GeneralInfo {\r\n  id              Int     @id @default(autoincrement()) @db.UnsignedTinyInt\r\n  abbr            String  @db.VarChar(4)\r\n  full_name       String  @db.TinyText\r\n  year            Int     @db.Year\r\n  species         String  @db.TinyText\r\n  EC_number       String  @db.VarChar(14)\r\n  UniProt_number  String  @db.VarChar(10)\r\n  PDB_entries     String? @db.TinyText\r\n  molar_mass      Int     @db.UnsignedMediumInt\r\n  ext_coefficient Int     @db.UnsignedMediumInt\r\n  pathway_desc    String  @db.Text\r\n  assay_desc      String  @db.Text\r\n}\r\n",
+  "inlineSchemaHash": "44b9ea030bc36c0199aed57f7f801dfd7bbc5b58a00d84701fff6e2b45b3a21f",
+  "copyEngine": true
 }
 config.dirname = '/'
 
 config.runtimeDataModel = JSON.parse("{\"models\":{\"GeneralInfo\":{\"dbName\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"abbr\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"full_name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"year\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"species\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"EC_number\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"UniProt_number\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"PDB_entries\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":false,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"molar_mass\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"ext_coefficient\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"Int\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"pathway_desc\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"assay_desc\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.getQueryEngineWasmModule = undefined
+config.engineWasm = undefined
 
 config.injectableEdgeEnv = () => ({
   parsed: {}
