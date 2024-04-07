@@ -2,8 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import "../../app/globals.css";
+import { useUser } from '@/components/UserProvider';
 
 const OligoSearchPage = () => {
+  const { user } = useUser();
+
+  console.log(user)
   const [enzymeList, setEnzymeList] = useState<any[]>([]);
   const [enzyme, setEnzyme] = useState('');
   const [enzymeVariant, setEnzymeVariant] = useState('');
@@ -35,7 +39,7 @@ const OligoSearchPage = () => {
       setOligosDisplay("No matching oligo found for the specified variant.");
     }
   };
-
+  
   return (
     <div className="flex flex-col items-center p-4">
       <h1 className="text-2xl font-bold mb-4">Oligo Search</h1>
