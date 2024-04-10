@@ -8,6 +8,6 @@ export default async function handler(req:any, res:any) {
       res.status(200).json(refs);
     } catch (error) {
       console.error('Request error', error);
-      res.status(500).json({ error: 'Error fetching characterization data' });
+      res.status(500).json({ error: 'Error fetching references data' });
     }
   }

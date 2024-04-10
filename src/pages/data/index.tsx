@@ -245,6 +245,17 @@ const DataPage = () => {
       else return '#FFFFFF'; 
     };
 
+    const renderRefs = (data: any) => {
+      const refs = [data.reference1, data.reference2, data.reference3];
+      return refs
+        .filter(ref => ref !== 0) // Filter out any '0' references
+        .map(ref => {
+          const referenceLink = references.find(r => r.id === ref)?.link;
+          return referenceLink ? <a href={referenceLink} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>
+            {ref} </a> : ref;
+        });
+    };
+
   return (
     <div className="flex flex-col items-center p-4">
       <h1 className="text-xl font-bold mb-4">BglB Variant Characterization Data</h1>
@@ -375,6 +386,8 @@ const DataPage = () => {
                 {data.Rosetta_score !== null && !isNaN(data.Rosetta_score) ? roundTo(data.Rosetta_score, 1) : '—'}
               </td>
 
+              {/* Refs cells */}
+              {expandData && <td className="border border-gray-300">{renderRefs(data)}</td>}
             </tr>
             ))}
           </tbody>
