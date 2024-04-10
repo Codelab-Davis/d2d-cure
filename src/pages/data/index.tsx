@@ -318,6 +318,7 @@ const DataPage = () => {
               <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('T50')}>T50</th>
               <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('Tm')}>Tm</th>
               <th className="border border-gray-300 cursor-pointer"onClick={() => handleColumnClick('Rosetta_score')} >Rosetta Score Change</th>
+              {expandData && <th className="border border-gray-300">Refs</th>}
             </tr>
           </thead>
           <tbody>

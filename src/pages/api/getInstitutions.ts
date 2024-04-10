@@ -1,6 +1,6 @@
 import { PrismaClient } from '../../../prisma/generated/client_users';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export default async function handler(req:any, res:any) {
   try {
