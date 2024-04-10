@@ -11,10 +11,21 @@ const DataPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [characterizationData, setCharacterizationData] = useState<any[]>([]); // This holds all the rows in the CharacterizationData table in the BglB database
   const [WTValues, setWTValues] = useState<any>(null);
-  const [lastClickedColumn, setLastClickedColumn] = useState<{ name: string; count: number } | null>(null);
 
 
+  // This handles sorting by columns
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
+  const handleColumnClick = (columnName: string) => {
+    if (sortColumn === columnName) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(columnName);
+      setSortDirection('asc');
+    }
+  };
+  
   useEffect(() => {
     const fetchInstitutions = async () => {
       const response = await fetch('/api/getInstitutions');
@@ -59,8 +70,8 @@ const DataPage = () => {
   }, []);
 
   const filteredData = characterizationData
-    .filter(data => 
-      data.curated || 
+    .filter(data =>  //data is a row in characterizationData
+      !showNonCurated || 
       (showNonCurated && !data.curated && data.submitted_for_curation) 
     )
     .filter(data => !selectedInstitution || data.institution === selectedInstitution)
@@ -92,6 +103,47 @@ const DataPage = () => {
   
       // If resnum is the same, sort by resmut in ascending order
       return a.resmut.localeCompare(b.resmut);
+    })
+    .sort((a, b) => {
+      if (!sortColumn) return 0;
+  
+      let valueA = a[sortColumn];
+      let valueB = b[sortColumn];
+  
+      // Check for null or NaN values and adjust sorting logic
+      const isANaN = valueA === null || isNaN(valueA);
+      const isBNaN = valueB === null || isNaN(valueB);
+  
+      if (isANaN && isBNaN) return 0; // Both are NaN or null, considered equal
+      if (isANaN) return sortDirection === 'asc' ? -1.0 : 1.0; // A is NaN or null, move A to the end if descending
+      if (isBNaN) return sortDirection === 'asc' ? 1.0 : -1.0; // B is NaN or null, move B to the end if descending
+  
+      // Adjust comparison for ascending or descending
+      if (sortDirection === 'asc') {
+        return valueA < valueB ? -1.0 : 1.0;
+      } else {
+        return valueA > valueB ? -1.0 : 1.0;
+      }
+    })
+    .sort((a, b) => {
+      if(sortColumn === 'Variant'){
+        const resnumA = parseInt(a.resnum, 10);
+        const resnumB = parseInt(b.resnum, 10);
+
+        // First, compare by resnum
+        if (resnumA !== resnumB) {
+          return sortDirection === 'asc' ? resnumA - resnumB : resnumB - resnumA;
+        }
+        // If resnum are equal, then compare by resmut
+        else {
+          if (sortDirection === 'asc') {
+            return a.resmut.localeCompare(b.resmut);
+          } else {
+            return b.resmut.localeCompare(a.resmut);
+          }
+        }
+      }
+      return 0;
     });
 
     const getVariantDisplay = (resid: any, resnum: any, resmut: any) => {
@@ -107,103 +159,84 @@ const DataPage = () => {
       return variant;
     };
 
-  const onColumnHeaderClick = (columnName: string) => {
-    setLastClickedColumn((prevState) => {
-      // If it's the same column, increment the count, otherwise reset
-      const isSameColumn = prevState && prevState.name === columnName;
-      const nextCount = isSameColumn ? prevState.count + 1 : 1;
-
-      // Log based on the count
-      let order = "Ascending Order"; // Default for the first click
-      if (nextCount === 2) order = "Descending Order";
-      else if (nextCount === 3) order = "Original Order";
-
-      console.log(`${columnName} sorted in ${order}`);
-
-      // Return the new state
-      return { name: columnName, count: nextCount % 3 }; // Reset to 0 after reaching 3
-    });
-  };
-  
-
-  const roundTo = (number:number, decPlaces:number) => {
-    if (number === null) {
-      return null; 
-    }
-    const factor = Math.pow(10, decPlaces);
-    return (Math.round(number * factor) / factor).toFixed(decPlaces);
-  };
-
-  const getGroupKey = (data:any) => {
-    // This function defines how we collapse the data (in this case, if variant is the same)
-    return `${data.resid}${data.resnum}${data.resmut}`;
-  };
-  
-  let displayData = []; // This will be the data we actually render. Needed for averaged/collapsed view
-  if (expandData) {
-    displayData = filteredData; // Use the data as-is for expanded view
-  } else {
-    const groupedData:any = {};
-    filteredData.forEach(data => {
-      const key = getGroupKey(data);
-      if (!groupedData[key]) {
-        groupedData[key] = []; 
+    const roundTo = (number:number, decPlaces:number) => {
+      if (number === null) {
+        return null; 
       }
-      groupedData[key].push(data);
-    });
-  
-    // NOTE: we are mutating the original data. So if you want to access NON NUMERICAL COLUMNS from here on out (like expressed, which is a boolean), define them here or it won't work 
-    displayData = Object.values(groupedData).map((group: any) => {
-      const averageRow: any = {
-        resid: group[0].resid,
-        resnum: group[0].resnum,
-        resmut: group[0].resmut,
-        isAggregate: group.length > 1,
-        count: group.length, 
-        expressed: group.some((item: any) => item.expressed)
-      };
-    
-      const sums: any = {};
-      const counts: any = {};
-    
-      group.forEach((item: any) => {
-        Object.keys(item).forEach(key => {
-          if (typeof item[key] === 'number') {
-            if (!sums[key]) {
-              sums[key] = 0;
-              counts[key] = 0;
-            }
-            if (item[key] !== null) { 
-              sums[key] += item[key];
-              counts[key]++;
-            }
-          }
-        });
-      });
-    
-      Object.keys(sums).forEach(key => {
-        averageRow[key] = counts[key] > 0 ? sums[key] / counts[key] : null; 
-      });
-    
-      return averageRow;
-    });
-  }
+      const factor = Math.pow(10, decPlaces);
+      return (Math.round(number * factor) / factor).toFixed(decPlaces);
+    };
 
-  const getColorForValue = (value:any) => {
-    if (value < -4.75) return '#36929A';
-    else if (value < -4.25) return '#4A9DA4';
-    else if (value < -3.75) return '#5EA8AE';
-    else if (value < -3.25) return '#72B2B8';
-    else if (value < -2.75) return '#86BDC2';
-    else if (value < -2.25) return '#9AC8CC';
-    else if (value < -1.75) return '#AAD3D6';
-    else if (value < -1.25) return '#C2DEE0';
-    else if (value < -0.75) return '#D7E9EB';
-    else if (value < -0.25) return '#EBF4F5';
-    else if (value > 0.25 && value <= 0.75) return '#FAC498';
-    else if (value > 0.75) return '#F68932';
-    else return '#FFFFFF'; 
-  };
+    const getGroupKey = (data:any) => {
+      // This function defines how we collapse the data (in this case, if variant is the same)
+      return `${data.resid}${data.resnum}${data.resmut}`;
+    };
+    
+    let displayData = []; // This will be the data we actually render. Needed for averaged/collapsed view
+    if (expandData) {
+      displayData = filteredData; // Use the data as-is for expanded view
+    } else {
+      const groupedData:any = {};
+      filteredData.forEach(data => {
+        const key = getGroupKey(data);
+        if (!groupedData[key]) {
+          groupedData[key] = []; 
+        }
+        groupedData[key].push(data);
+      });
+    
+      // NOTE: we are mutating the original data. So if you want to access NON NUMERICAL COLUMNS from here on out (like expressed, which is a boolean), define them here or it won't work 
+      displayData = Object.values(groupedData).map((group: any) => {
+        const averageRow: any = {
+          resid: group[0].resid,
+          resnum: group[0].resnum,
+          resmut: group[0].resmut,
+          isAggregate: group.length > 1,
+          count: group.length, 
+          expressed: group.some((item: any) => item.expressed)
+        };
+      
+        const sums: any = {};
+        const counts: any = {};
+      
+        group.forEach((item: any) => {
+          Object.keys(item).forEach(key => {
+            if (typeof item[key] === 'number') {
+              if (!sums[key]) {
+                sums[key] = 0;
+                counts[key] = 0;
+              }
+              if (item[key] !== null) { 
+                sums[key] += item[key];
+                counts[key]++;
+              }
+            }
+          });
+        });
+      
+        Object.keys(sums).forEach(key => {
+          averageRow[key] = counts[key] > 0 ? sums[key] / counts[key] : null; 
+        });
+      
+        return averageRow;
+      });
+    }
+
+    const getColorForValue = (value:any) => {
+      if (value < -4.75) return '#36929A';
+      else if (value < -4.25) return '#4A9DA4';
+      else if (value < -3.75) return '#5EA8AE';
+      else if (value < -3.25) return '#72B2B8';
+      else if (value < -2.75) return '#86BDC2';
+      else if (value < -2.25) return '#9AC8CC';
+      else if (value < -1.75) return '#AAD3D6';
+      else if (value < -1.25) return '#C2DEE0';
+      else if (value < -0.75) return '#D7E9EB';
+      else if (value < -0.25) return '#EBF4F5';
+      else if (value > 0.25 && value <= 0.75) return '#FAC498';
+      else if (value > 0.75) return '#F68932';
+      else return '#FFFFFF'; 
+    };
 
   return (
     <div className="flex flex-col items-center p-4">
@@ -277,14 +310,14 @@ const DataPage = () => {
         <table className="table-auto border-collapse border border-gray-400">
           <thead>
             <tr>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Variant')}>Variant</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Yield')}>Yield</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Km')}>Km</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Kcat')}>Kcat</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Kcat/Km')}>Kcat/Km</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('T50')}>T50</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Tm')}>Tm</th>
-              <th className="border border-gray-300" onClick={() => onColumnHeaderClick('Rosetta Score Change')}>Rosetta Score Change</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('Variant')}>Variant</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('yield_avg')}>Yield</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('KM_avg')}>Km</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('kcat_avg')}>Kcat</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('kcat_over_KM')}>Kcat/Km</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('T50')}>T50</th>
+              <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('Tm')}>Tm</th>
+              <th className="border border-gray-300 cursor-pointer"onClick={() => handleColumnClick('Rosetta_score')} >Rosetta Score Change</th>
             </tr>
           </thead>
           <tbody>
@@ -325,7 +358,7 @@ const DataPage = () => {
               </td>
               
               {/* Tm cells */}
-              <td className="border border-gray-300" style={{backgroundColor: getColorForValue(data.Tm !== null && !isNaN(data.Tm) ? data.Tm - WTValues.WT_Tm : -5)}}>
+              <td className="border border-gray-300 " style={{backgroundColor: getColorForValue(data.Tm !== null && !isNaN(data.Tm) ? data.Tm - WTValues.WT_Tm : -5)}}>
                 {data.Tm !== null && !isNaN(data.Tm) ? `${roundTo(data.Tm, 1)} ± ${data.Tm_SD !== null && !isNaN(data.Tm_SD) ? roundTo(data.Tm_SD, 1) : '—'}` : '—'}
               </td>
 
