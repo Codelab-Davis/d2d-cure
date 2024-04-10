@@ -5,6 +5,7 @@ const DataPage = () => {
   const [expandData, setExpandData] = useState(false);
   const [useRosettaNumbering, setUseRosettaNumbering] = useState(false);
   const [sequences, setSequences] = useState<any[]>([]);
+  const [references, setReferences] = useState<any[]>([]);
   const [showNonCurated, setShowNonCurated] = useState(false); 
   const [institutions, setInstitutions] = useState<any[]>([]);
   const [selectedInstitution, setSelectedInstitution] = useState('');
@@ -63,10 +64,16 @@ const DataPage = () => {
       const data = await response.json();
       setSequences(data);
     };
+    const fetchReferences = async () => {
+      const response = await fetch('/api/getReferences');
+      const refs = await response.json();
+      setReferences(refs);
+    };
 
     fetchSequences();
     fetchInstitutions();
     fetchData();
+    fetchReferences();
   }, []);
 
   const filteredData = characterizationData
