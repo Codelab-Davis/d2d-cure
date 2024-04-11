@@ -153,22 +153,15 @@ const DataPage = () => {
       return 0;
     })
     .sort((a, b) => {
-      if(sortColumn === 'Refs'){
-        const refnumA = parseInt(a.reference1, 10);
-        const refnumB = parseInt(b.reference1, 10);
-
-        // First, compare by resnum
-        if (refnumA !== resnumB) {
-          return sortDirection === 'asc' ? resnumA - resnumB : resnumB - resnumA;
-        }
-        // If resnum are equal, then compare by resmut
-        else {
-          if (sortDirection === 'asc') {
-            return a.resmut.localeCompare(b.resmut);
-          } else {
-            return b.resmut.localeCompare(a.resmut);
-          }
-        }
+      if (!sortColumn) return 0;
+      // Special sorting logic for the 'Refs' column based on reference1
+      if (sortColumn === 'Refs') {
+        // Convert reference1 to numbers for comparison
+        const refA = parseInt(a.reference1, 10);
+        const refB = parseInt(b.reference1, 10);
+    
+        // Numerical sorting, accounting for '0' values appropriately
+        return sortDirection === 'asc' ? refA - refB : refB - refA;
       }
       return 0;
     });
@@ -367,7 +360,7 @@ const DataPage = () => {
               <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('T50')}>T50</th>
               <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('Tm')}>Tm</th>
               <th className="border border-gray-300 cursor-pointer"onClick={() => handleColumnClick('Rosetta_score')} >Rosetta Score Change</th>
-              {expandData && <th className="border border-gray-300">Refs</th>}
+              {expandData && <th className="border border-gray-300 cursor-pointer" onClick={() => handleColumnClick('Refs')}>Refs</th>}
             </tr>
           </thead>
           <tbody>
