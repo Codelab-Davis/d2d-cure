@@ -151,6 +151,26 @@ const DataPage = () => {
         }
       }
       return 0;
+    })
+    .sort((a, b) => {
+      if(sortColumn === 'Refs'){
+        const refnumA = parseInt(a.reference1, 10);
+        const refnumB = parseInt(b.reference1, 10);
+
+        // First, compare by resnum
+        if (refnumA !== resnumB) {
+          return sortDirection === 'asc' ? resnumA - resnumB : resnumB - resnumA;
+        }
+        // If resnum are equal, then compare by resmut
+        else {
+          if (sortDirection === 'asc') {
+            return a.resmut.localeCompare(b.resmut);
+          } else {
+            return b.resmut.localeCompare(a.resmut);
+          }
+        }
+      }
+      return 0;
     });
 
     const getVariantDisplay = (resid: any, resnum: any, resmut: any) => {
@@ -244,16 +264,27 @@ const DataPage = () => {
       else if (value > 0.75) return '#F68932';
       else return '#FFFFFF'; 
     };
-
+    
     const renderRefs = (data: any) => {
       const refs = [data.reference1, data.reference2, data.reference3];
-      return refs
-        .filter(ref => ref !== 0) // Filter out any '0' references
-        .map(ref => {
-          const referenceLink = references.find(r => r.id === ref)?.link;
-          return referenceLink ? <a href={referenceLink} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>
-            {ref} </a> : ref;
-        });
+      return (
+        <>
+          {refs.map((ref, index) => {
+            if (ref !== 0) {
+              const referenceLink = references.find(r => r.id === ref)?.link;
+              // hyperlink
+              return (
+                referenceLink ? 
+                <a key={index} href={referenceLink} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline', marginRight: '5px' }}>
+                  {ref}
+                </a> : 
+                // no link found
+                <span key={index} style={{ marginRight: '5px' }}>{ref}</span>
+              );
+            }
+          })}
+        </>
+      );
     };
 
   return (
