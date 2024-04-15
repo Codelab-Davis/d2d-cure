@@ -126,7 +126,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_publications",
+      "value": "/Users/ryanuyeki/Downloads/codelab/d2d/d2d-cure/prisma/generated/client_publications",
       "fromEnvVar": null
     },
     "config": {
@@ -135,7 +135,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin",
         "native": true
       }
     ],
@@ -161,8 +161,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  output   = \"./generated/client_publications\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/publications\"\r\n}\r\n\r\nmodel Papers {\r\n  id          Int     @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  author1     String? @db.TinyText\r\n  all_authors String? @db.Text\r\n  year        Int?    @db.Year\r\n  title       String? @db.Text\r\n  journal     String? @db.Text\r\n  volume      Int?    @db.UnsignedSmallInt\r\n  issue       Int?    @db.UnsignedTinyInt\r\n  first_page  String? @db.TinyText\r\n  last_page   String? @db.TinyText\r\n  link        String? @db.Text\r\n}\r\n",
-  "inlineSchemaHash": "5177faf12ef4de7e25dfe9546ed8375f641e5b124d27c51b9062f2a6d16ad1ce",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client_publications\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/publications\"\n}\n\nmodel Papers {\n  id          Int     @id @default(autoincrement()) @db.UnsignedSmallInt\n  author1     String? @db.TinyText\n  all_authors String? @db.Text\n  year        Int?    @db.Year\n  title       String? @db.Text\n  journal     String? @db.Text\n  volume      Int?    @db.UnsignedSmallInt\n  issue       Int?    @db.UnsignedTinyInt\n  first_page  String? @db.TinyText\n  last_page   String? @db.TinyText\n  link        String? @db.Text\n}\n",
+  "inlineSchemaHash": "7fbdea24811dca10d270936158b8db416e1b2b35b16b068260ff618421883348",
   "copyEngine": true
 }
 config.dirname = '/'
