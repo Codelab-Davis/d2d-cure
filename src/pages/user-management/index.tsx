@@ -51,13 +51,13 @@ function userManagement() {
   }
 
   //filter users based on university name
-  /*const filteredUsers: any[] = [];
+const filteredUsers: any[] = [];
   for(let i = 0; i<allUsers.length; i++){
     if(user.institution == allUsers[i].institution){
       filteredUsers.push(allUsers[i]);
     }
   }
-  console.log("Filtered Users", filteredUsers);*/
+  console.log("Filtered Users", filteredUsers);
 
 
   const handleCheckboxChange = (userId: number) => {
@@ -168,7 +168,7 @@ function userManagement() {
             </tr>
           </thead>
           <tbody>
-            {allUsers.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.id}>
                 <td style={{ marginLeft: '10px' }}>
                   <input
