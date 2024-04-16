@@ -17,7 +17,7 @@ const NavBar = () => {
           </Link>
           {/* Conditionally render "Analyze/Submit Data" */}
           {user?.status && (
-            <Link href="#">
+            <Link href="/submit">
               <span className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Analyze/Submit Data</span>
             </Link>
           )}
