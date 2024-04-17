@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@/components/UserProvider';
+import { useRouter } from 'next/router';
 
 const SubmitPage = () => {
   const { user } = useUser();
+  const router = useRouter();
+
 
   // part 1 - which form do you want? 
   const [selection, setSelection] = useState('');
@@ -14,11 +17,15 @@ const SubmitPage = () => {
   const [enzymeVariant, setEnzymeVariant] = useState('');
   const [sequences, setSequences] = useState<any[]>([]);
   const [error, setError] = useState('');
+  const [resid, setResid] = useState('');
+  const [resnum, setResnum] = useState('');
+  const [resmut, setResmut] = useState('');
 
   // part 3 - how many records already exist, if none, then make your own 
   const [entered, setEntered] = useState('null');
   const [matchedData, setMatchedData] = useState<any[]>([]);
   const [charData, setCharData] = useState<any[]>([]);
+  const [newEntry, setNewEntry] = useState<any>();
 
 
   const handleSubmit = () => {
@@ -45,6 +52,9 @@ const SubmitPage = () => {
     // Variant the user entered is valid 
     console.log('Variant is valid:', { resid, resnum, resmut });
     setEntered(resid); 
+    setResid(resid); 
+    setResnum(resnum); 
+    setResmut(resmut); 
     const filteredData = charData.filter((data) => 
     String(data.resid) === resid &&
     String(data.resnum) === resnum &&
@@ -55,6 +65,51 @@ const SubmitPage = () => {
     setMatchedData(filteredData);
   };
 
+  const handleCreateNewDataset = async () => {
+  
+    try {
+      const response = await fetch('/api/createNewCharacterizationDataEntry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: user?.user_name, 
+          institution: user?.institution, 
+          pi: user?.pi, 
+          resid: resid, 
+          resnum: resnum, 
+          resmut: resmut, 
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to create new dataset');
+      }
+
+      const newDataEntry = await response.json();
+      setNewEntry(newDataEntry);
+      console.log("New dataset created successfully!", newDataEntry);
+      //router.push(`/submit/single_variant/${newEntry.id}`);
+
+  
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Failed to create new dataset. Please try again.');
+    }
+  };
+
+  const handleSelectDataset = (id:any) => {
+    router.push(`/submit/single_variant/${id}`);
+  };
+
+
+  // for new dataset navigation to work 
+  useEffect(() => {
+    if (newEntry && newEntry.id) {
+      router.push(`/submit/single_variant/${newEntry.id}`);
+    }
+  }, [newEntry, router]);
 
   useEffect(() => {
     const fetchEnzymes = async () => {
@@ -125,68 +180,24 @@ const SubmitPage = () => {
                     {error && <p className="text-red-500">{error}</p>}
                 </div>
                 {entered !== 'null' && (
-                  <div className="text-center">
+                  <>
+                  <div className="text-center mb-10">
                     <p className="mb-2">Previous datasets:</p>
                     {matchedData.length > 0 ? (
                       <ul>
                         {matchedData.map((item) => (
-                          <li key={item.id}><button className="mr-3">Select</button>Dataset created by {item.creator}</li>
+                          <li key={item.id}>
+                            <button onClick={() => handleSelectDataset(item.id)} className="mr-3">Select</button>
+                            Dataset created by {item.creator}
+                          </li>
                         ))}
                       </ul>
                     ) : (
                       <p>There are no records that match from your school.</p>
                     )}
-                    <p className="mt-4">Create a new dataset:</p>
-                    <div className="ml-8 text-center">
-                      <div>
-                        <label>Protein modeled?</label>
-                        <input type="text" placeholder="WT starting score" className="ml-2" />
-                        <input type="text" placeholder="Variant ending score" className="ml-2" />
-                      </div>
-                      <div>
-                        <label>Oligonucleotide ordered?</label>
-                        <input type="checkbox" className="ml-2" />
-                      </div>
-                      <div>
-                        <label>Plasma sequence verified?</label>
-                        <button className="ml-2">Upload sequencing file</button>
-                      </div>
-                      <div>
-                        <label>Protein expressed?</label>
-                        <input type="checkbox" className="ml-2" />
-                      </div>
-                      <div>
-                        <label>Kinetic assay data uploaded?</label>
-                        <button className="ml-2">Upload raw data</button>
-                      </div>
-                      <div>
-                        <label>Wild-type kinetic assay data uploaded?</label>
-                        <button className="ml-2">Select WT data</button>
-                      </div>
-                      <div>
-                        <label>Thermostability assay data uploaded?</label>
-                        <button className="ml-2">Upload raw data</button>
-                      </div>
-                      <div>
-                        <label>Wild-type thermostability assay data uploaded?</label>
-                        <button className="ml-2">Select WT data</button>
-                      </div>
-                      <div>
-                        <label>Melting point values uploaded?</label>
-                        <input type="text" placeholder="Tm mean(°C)" className="ml-2" />
-                        <input type="text" placeholder="Tm standard deviation(°C)" className="ml-2" />
-                      </div>
-                      <div>
-                        <label>SDS page gel uploaded?</label>
-                        <button className="ml-2">Upload new gel image</button>
-                        <button className="ml-2">Select previous gel image</button>
-                      </div>
-                      <div>
-                        <label>Comments: </label>
-                        <input type="text" placeholder="enter comments here" className="ml-2" />
-                      </div>
-                    </div>
                   </div>
+                  <button onClick={handleCreateNewDataset} className="mt-5 text-blue font-bold py-2 px-4 rounded">Create New Dataset</button>
+                  </>
                 )}
           </div>
         )}
