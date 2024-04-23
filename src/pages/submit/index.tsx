@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import "../../app/globals.css";
 import { useUser } from '@/components/UserProvider';
+import NavBar from '@/components/NavBar';
+import { Protect } from '@/components/Protect';
 
 
 const SubmitPage = () => {
     const { user, loading } = useUser();
 
-    if (loading) {
-        return <p>Loading</p>
-    }
-
-    if (!user?.status) {
-        return (
-            <div>
-                <h1>Please login to gain access to this page.</h1>
-            </div>
-        )
-    }
-
     return (
         <div>
-            <h1>Submit data</h1>
+            <NavBar/>
+            <Protect minimumStatus={"student"}>
+                <div>
+                    <h1>Submit data</h1>
+                </div>
+            </Protect>
         </div>
     )
 }

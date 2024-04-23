@@ -4,6 +4,7 @@ import NavBar from '@/components/NavBar';
 import Link from 'next/link';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebaseConfig';
+import { useRouter } from 'next/router';
 
 const SignUpPage = () => {
   const [userType, setUserType] = useState("");
@@ -18,6 +19,8 @@ const SignUpPage = () => {
 
   const [institutions, setInstitutions] = useState<any[]>([]);
   const [professors, setProfessors] = useState<any[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchInstitutions = async () => {
@@ -59,6 +62,7 @@ const SignUpPage = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           console.log("Successfully created new user.")
+          router.push('/')
         })
         // Might want to catch case where createUser succeeds but firebase fails
     }).catch((error) => {
@@ -128,7 +132,7 @@ const SignUpPage = () => {
                 <option value=""></option>
                 {
                   institutions.map((institution) => {
-                    return <option key={institution.id} value={institution.fullname}>{institution.fullname}</option>
+                    return <option key={institution.id} value={institution.abbr}>{institution.fullname}</option>
                   })
                 }
               </select>
