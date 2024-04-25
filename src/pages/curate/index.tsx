@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../app/globals.css";
 import { useUser } from '@/components/UserProvider';
-import { Protect } from '@/components/Protect';
+import { AuthChecker } from '@/components/AuthChecker';
 import NavBar from '@/components/NavBar';
 
 
@@ -11,11 +11,11 @@ const CuratePage = () => {
     return (
         <div>
             <NavBar/>
-            <Protect minimumStatus={"professor"}>
+            <AuthChecker minimumStatus={"professor"}>
                 <div>
                     <h1>Curate data</h1>
                 </div>
-            </Protect>
+            </AuthChecker>
         </div>
 
 

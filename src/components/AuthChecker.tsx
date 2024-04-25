@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { useUser } from "./UserProvider";
 
-export const Protect = (
+export const AuthChecker = (
     props: {
         minimumStatus: String   // "ADMIN", "student", "professor", "other"
         children: ReactNode
