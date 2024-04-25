@@ -33,12 +33,17 @@ export const AuthChecker = (
                 <h1>Please login to gain access to this page.</h1>
             </div>
         );
-    }
-
-    if (!validStatus()) {
+    } else if (!validStatus()) {
         return (
             <div>
-                <h1>You do not have permission to access this page.</h1>
+                <h1>You do not have permission to access this page. Please contact your admin if you believe this is an error.</h1>
+            </div>
+        );
+    } else if (!user.approved) {
+        // Sufficient permissions but not approved yet
+        return (
+            <div>
+                <h1>You have not been approved to access this page yet.</h1>
             </div>
         );
     }
