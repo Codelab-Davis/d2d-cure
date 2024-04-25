@@ -126,7 +126,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_publications",
+      "value": "C:\\Users\\visha\\CodeLab\\D2D WSQ24\\d2d-cure\\prisma\\generated\\client_publications",
       "fromEnvVar": null
     },
     "config": {
