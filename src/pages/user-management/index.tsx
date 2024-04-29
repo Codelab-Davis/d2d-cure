@@ -3,6 +3,9 @@ import "../../app/globals.css";
 import { useUser } from '@/components/UserProvider';
 import NavBar from '@/components/NavBar';
 import firebaseAdmin from "../../../firebaseAdmin"; 
+import { getAuth, deleteUser } from "firebase/auth";
+import { auth } from "firebase-admin";
+import { TopologyDescription } from 'mongodb';
 
 function userManagement() {
   const [institutions, setInstitutionsList] = useState<any[]>([]);
@@ -51,13 +54,13 @@ function userManagement() {
   }
 
   //filter users based on university name
-/*const filteredUsers: any[] = [];
+const filteredUsers: any[] = [];
   for(let i = 0; i<allUsers.length; i++){
     if(user.institution == allUsers[i].institution){
       filteredUsers.push(allUsers[i]);
     }
   }
-  console.log("Filtered Users", filteredUsers);*/
+  console.log("Filtered Users", filteredUsers);
 
 
   const handleCheckboxChange = (userId: number) => {
@@ -129,6 +132,43 @@ function userManagement() {
     }
   };
 
+const handleDeleteFirebase = async () => {
+    // Get the IDs of checked users
+    const usersToDelete = Object.keys(checkedUsers)
+      .filter((userId: string) => checkedUsers[parseInt(userId, 10)]);
+
+      const userEmails = usersToDelete.map(userId => {
+        // Assuming allUsers is an array containing user data
+        const user = allUsers.find(u => u.id === parseInt(userId, 10));
+        return user ? user.email : null;
+      });
+    
+      // Remove null values from userEmails array
+      const validEmails = userEmails.filter(email => email !== null);
+    
+      console.log('User Emails:', validEmails);
+
+    
+
+    try {
+      const response = await fetch('/api/firebaseDelete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ usersToDelete, validEmails }),
+      });
+      if (response.ok) {
+        console.log('Users deleted successfully');
+      } else {
+        console.error('Failed to delete users:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error deleting users:', error);
+    }
+  };
+  
+
   return (
     <div>
       <NavBar />
@@ -147,7 +187,10 @@ function userManagement() {
           <button style={{ marginBottom: '10px' }}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
-            onClick={handleDelete}
+            onClick={() => {
+              handleDeleteFirebase();
+              handleDelete();
+          }}
           >
             Delete
           </button>
@@ -168,7 +211,7 @@ function userManagement() {
             </tr>
           </thead>
           <tbody>
-            {allUsers.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.id}>
                 <td style={{ marginLeft: '10px' }}>
                   <input
@@ -196,4 +239,3 @@ function userManagement() {
 }
 
 export default userManagement;
-
