@@ -88,7 +88,7 @@ const filteredUsers: any[] = [];
             },
             body: JSON.stringify({
               checkedUsers: {
-                [userId]: checkedUsers[userId], // Use the parsed user ID as the key
+                [userId]: checkedUsers[userId], 
               },
             }),
           });
@@ -133,17 +133,14 @@ const filteredUsers: any[] = [];
   };
 
 const handleDeleteFirebase = async () => {
-    // Get the IDs of checked users
     const usersToDelete = Object.keys(checkedUsers)
       .filter((userId: string) => checkedUsers[parseInt(userId, 10)]);
 
       const userEmails = usersToDelete.map(userId => {
-        // Assuming allUsers is an array containing user data
         const user = allUsers.find(u => u.id === parseInt(userId, 10));
         return user ? user.email : null;
       });
     
-      // Remove null values from userEmails array
       const validEmails = userEmails.filter(email => email !== null);
     
       console.log('User Emails:', validEmails);
