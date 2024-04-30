@@ -603,10 +603,13 @@ declare type Dictionary<T> = {
     [key: string]: T | undefined;
 };
 
+<<<<<<< Updated upstream
 declare interface Dictionary_2<T> {
     [key: string]: T;
 }
 
+=======
+>>>>>>> Stashed changes
 export declare namespace DMMF {
     export type Document = ReadonlyDeep_2<{
         datamodel: Datamodel;
@@ -1005,6 +1008,7 @@ export declare const empty: Sql;
 
 export declare type EmptyToUnknown<T> = T;
 
+<<<<<<< Updated upstream
 declare abstract class Engine<InteractiveTransactionPayload = unknown> {
     abstract onBeforeExit(callback: () => Promise<void>): void;
     abstract start(): Promise<void>;
@@ -1017,6 +1021,22 @@ declare abstract class Engine<InteractiveTransactionPayload = unknown> {
     abstract transaction(action: 'rollback', headers: Transaction_2.TransactionHeaders, info: Transaction_2.InteractiveTransactionInfo<unknown>): Promise<void>;
     abstract metrics(options: MetricsOptionsJson): Promise<Metrics>;
     abstract metrics(options: MetricsOptionsPrometheus): Promise<string>;
+=======
+declare interface Engine<InteractiveTransactionPayload = unknown> {
+    /** The name of the engine. This is meant to be consumed externally */
+    readonly name: string;
+    onBeforeExit(callback: () => Promise<void>): void;
+    start(): Promise<void>;
+    stop(): Promise<void>;
+    version(forceRun?: boolean): Promise<string> | string;
+    request<T>(query: JsonQuery, options: RequestOptions_2<InteractiveTransactionPayload>): Promise<QueryEngineResult<T>>;
+    requestBatch<T>(queries: JsonQuery[], options: RequestBatchOptions<InteractiveTransactionPayload>): Promise<BatchQueryEngineResult<T>[]>;
+    transaction(action: 'start', headers: Transaction_2.TransactionHeaders, options: Transaction_2.Options): Promise<Transaction_2.InteractiveTransactionInfo<unknown>>;
+    transaction(action: 'commit', headers: Transaction_2.TransactionHeaders, info: Transaction_2.InteractiveTransactionInfo<unknown>): Promise<void>;
+    transaction(action: 'rollback', headers: Transaction_2.TransactionHeaders, info: Transaction_2.InteractiveTransactionInfo<unknown>): Promise<void>;
+    metrics(options: MetricsOptionsJson): Promise<Metrics>;
+    metrics(options: MetricsOptionsPrometheus): Promise<string>;
+>>>>>>> Stashed changes
 }
 
 declare interface EngineConfig {
@@ -2335,6 +2355,56 @@ declare interface Queryable {
     executeRaw(params: Query): Promise<Result_4<number>>;
 }
 
+<<<<<<< Updated upstream
+=======
+declare type QueryEngineBatchGraphQLRequest = {
+    batch: QueryEngineRequest[];
+    transaction?: boolean;
+    isolationLevel?: Transaction_2.IsolationLevel;
+};
+
+declare type QueryEngineBatchRequest = QueryEngineBatchGraphQLRequest | JsonBatchQuery;
+
+declare type QueryEngineConfig = {
+    datamodel: string;
+    configDir: string;
+    logQueries: boolean;
+    ignoreEnvVarErrors: boolean;
+    datasourceOverrides: Record<string, string>;
+    env: Record<string, string | undefined>;
+    logLevel: QueryEngineLogLevel;
+    telemetry?: QueryEngineTelemetry;
+    engineProtocol: EngineProtocol;
+};
+
+declare interface QueryEngineConstructor {
+    new (config: QueryEngineConfig, logger: (log: string) => void, adapter?: ErrorCapturingDriverAdapter): QueryEngineInstance;
+}
+
+declare type QueryEngineInstance = {
+    connect(headers: string): Promise<void>;
+    disconnect(headers: string): Promise<void>;
+    /**
+     * @param requestStr JSON.stringified `QueryEngineRequest | QueryEngineBatchRequest`
+     * @param headersStr JSON.stringified `QueryEngineRequestHeaders`
+     */
+    query(requestStr: string, headersStr: string, transactionId?: string): Promise<string>;
+    sdlSchema(): Promise<string>;
+    dmmf(traceparent: string): Promise<string>;
+    startTransaction(options: string, traceHeaders: string): Promise<string>;
+    commitTransaction(id: string, traceHeaders: string): Promise<string>;
+    rollbackTransaction(id: string, traceHeaders: string): Promise<string>;
+    metrics(options: string): Promise<string>;
+};
+
+declare type QueryEngineLogLevel = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'off';
+
+declare type QueryEngineRequest = {
+    query: string;
+    variables: Object;
+};
+
+>>>>>>> Stashed changes
 declare type QueryEngineResult<T> = {
     data: T;
     elapsed: number;

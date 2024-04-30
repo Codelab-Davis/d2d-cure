@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "name": "prisma-client-583c43d4f7e8e563fc581afac571aeaae3b17f3fc1a258eb3100bfe784f6e615",
+=======
+  "name": "prisma-client-6c05ee0c47ea1924b380301476438ab6fbe3329d1dbf9148911d7b4f50728cab",
+>>>>>>> Stashed changes
   "main": "index.js",
   "types": "index.d.ts",
   "browser": "index-browser.js",
@@ -68,6 +72,10 @@
     },
     "./*": "./*"
   },
+<<<<<<< Updated upstream
   "version": "5.9.1",
+=======
+  "version": "5.10.2",
+>>>>>>> Stashed changes
   "sideEffects": false
 }

@@ -31,11 +31,19 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
+<<<<<<< Updated upstream
  * Prisma Client JS version: 5.9.1
  * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
  */
 Prisma.prismaVersion = {
   client: "5.9.1",
+=======
+ * Prisma Client JS version: 5.10.2
+ * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+ */
+Prisma.prismaVersion = {
+  client: "5.10.2",
+>>>>>>> Stashed changes
   engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
 }
 
@@ -147,7 +155,11 @@ const config = {
     "rootEnvPath": null
   },
   "relativePath": "../..",
+<<<<<<< Updated upstream
   "clientVersion": "5.9.1",
+=======
+  "clientVersion": "5.10.2",
+>>>>>>> Stashed changes
   "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
   "datasourceNames": [
     "db"
@@ -162,9 +174,15 @@ const config = {
       }
     }
   },
+<<<<<<< Updated upstream
   "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKICBvdXRwdXQgICA9ICIuL2dlbmVyYXRlZC9jbGllbnRfcHVibGljYXRpb25zIgp9CgpkYXRhc291cmNlIGRiIHsKICBwcm92aWRlciA9ICJteXNxbCIKICB1cmwgICAgICA9ICJteXNxbDovL2FkbWluOmhlbGxvdGhlcmVAZDJkZGIuY2t4amRkNGV3NmNwLnVzLWVhc3QtMi5yZHMuYW1hem9uYXdzLmNvbTozMzA2L3B1YmxpY2F0aW9ucyIKfQoKbW9kZWwgUGFwZXJzIHsKICBpZCAgICAgICAgICBJbnQgICAgIEBpZCBAZGVmYXVsdChhdXRvaW5jcmVtZW50KCkpIEBkYi5VbnNpZ25lZFNtYWxsSW50CiAgYXV0aG9yMSAgICAgU3RyaW5nPyBAZGIuVGlueVRleHQKICBhbGxfYXV0aG9ycyBTdHJpbmc/IEBkYi5UZXh0CiAgeWVhciAgICAgICAgSW50PyAgICBAZGIuWWVhcgogIHRpdGxlICAgICAgIFN0cmluZz8gQGRiLlRleHQKICBqb3VybmFsICAgICBTdHJpbmc/IEBkYi5UZXh0CiAgdm9sdW1lICAgICAgSW50PyAgICBAZGIuVW5zaWduZWRTbWFsbEludAogIGlzc3VlICAgICAgIEludD8gICAgQGRiLlVuc2lnbmVkVGlueUludAogIGZpcnN0X3BhZ2UgIFN0cmluZz8gQGRiLlRpbnlUZXh0CiAgbGFzdF9wYWdlICAgU3RyaW5nPyBAZGIuVGlueVRleHQKICBsaW5rICAgICAgICBTdHJpbmc/IEBkYi5UZXh0Cn0K",
   "inlineSchemaHash": "7fbdea24811dca10d270936158b8db416e1b2b35b16b068260ff618421883348",
   "noEngine": false
+=======
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"windows\"]\n  output   = \"./generated/client_publications\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/publications\"\n}\n\nmodel Papers {\n  id          Int     @id @default(autoincrement()) @db.UnsignedSmallInt\n  author1     String? @db.TinyText\n  all_authors String? @db.Text\n  year        Int?    @db.Year\n  title       String? @db.Text\n  journal     String? @db.Text\n  volume      Int?    @db.UnsignedSmallInt\n  issue       Int?    @db.UnsignedTinyInt\n  first_page  String? @db.TinyText\n  last_page   String? @db.TinyText\n  link        String? @db.Text\n}\n",
+  "inlineSchemaHash": "b0686464f756b1c5f918fcb5f07864fb1541a6cd3effb361a13971632397c1b3",
+  "copyEngine": true
+>>>>>>> Stashed changes
 }
 
 const fs = require('fs')
@@ -203,6 +221,13 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(process.cwd(), "generated/client_publications/libquery_engine-darwin-arm64.dylib.node")
+<<<<<<< Updated upstream
+=======
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "generated/client_publications/query_engine-windows.dll.node")
+>>>>>>> Stashed changes
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/client_publications/schema.prisma")

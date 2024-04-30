@@ -31,12 +31,21 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
+<<<<<<< Updated upstream
  * Prisma Client JS version: 5.9.1
  * Query Engine version: 23fdc5965b1e05fc54e5f26ed3de66776b93de64
  */
 Prisma.prismaVersion = {
   client: "5.9.1",
   engine: "23fdc5965b1e05fc54e5f26ed3de66776b93de64"
+=======
+ * Prisma Client JS version: 5.10.2
+ * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+ */
+Prisma.prismaVersion = {
+  client: "5.10.2",
+  engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
+>>>>>>> Stashed changes
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -147,8 +156,13 @@ const config = {
     "rootEnvPath": null
   },
   "relativePath": "../..",
+<<<<<<< Updated upstream
   "clientVersion": "5.9.1",
   "engineVersion": "23fdc5965b1e05fc54e5f26ed3de66776b93de64",
+=======
+  "clientVersion": "5.10.2",
+  "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
+>>>>>>> Stashed changes
   "datasourceNames": [
     "db"
   ],
@@ -162,9 +176,15 @@ const config = {
       }
     }
   },
+<<<<<<< Updated upstream
   "inlineSchema": "Z2VuZXJhdG9yIGNsaWVudCB7CiAgcHJvdmlkZXIgPSAicHJpc21hLWNsaWVudC1qcyIKICBvdXRwdXQgICA9ICIuL2dlbmVyYXRlZC9jbGllbnRfZW56eW1lcyIKfQoKZGF0YXNvdXJjZSBkYiB7CiAgcHJvdmlkZXIgPSAibXlzcWwiCiAgdXJsICAgICAgPSAibXlzcWw6Ly9hZG1pbjpoZWxsb3RoZXJlQGQyZGRiLmNreGpkZDRldzZjcC51cy1lYXN0LTIucmRzLmFtYXpvbmF3cy5jb206MzMwNi9lbnp5bWVzIgp9Cgptb2RlbCBHZW5lcmFsSW5mbyB7CiAgaWQgICAgICAgICAgICAgIEludCAgICAgQGlkIEBkZWZhdWx0KGF1dG9pbmNyZW1lbnQoKSkgQGRiLlVuc2lnbmVkVGlueUludAogIGFiYnIgICAgICAgICAgICBTdHJpbmcgIEBkYi5WYXJDaGFyKDQpCiAgZnVsbF9uYW1lICAgICAgIFN0cmluZyAgQGRiLlRpbnlUZXh0CiAgeWVhciAgICAgICAgICAgIEludCAgICAgQGRiLlllYXIKICBzcGVjaWVzICAgICAgICAgU3RyaW5nICBAZGIuVGlueVRleHQKICBFQ19udW1iZXIgICAgICAgU3RyaW5nICBAZGIuVmFyQ2hhcigxNCkKICBVbmlQcm90X251bWJlciAgU3RyaW5nICBAZGIuVmFyQ2hhcigxMCkKICBQREJfZW50cmllcyAgICAgU3RyaW5nPyBAZGIuVGlueVRleHQKICBtb2xhcl9tYXNzICAgICAgSW50ICAgICBAZGIuVW5zaWduZWRNZWRpdW1JbnQKICBleHRfY29lZmZpY2llbnQgSW50ICAgICBAZGIuVW5zaWduZWRNZWRpdW1JbnQKICBwYXRod2F5X2Rlc2MgICAgU3RyaW5nICBAZGIuVGV4dAogIGFzc2F5X2Rlc2MgICAgICBTdHJpbmcgIEBkYi5UZXh0Cn0K",
   "inlineSchemaHash": "6e478065b4889e11d061a0d7eec245a852ff7cc284807d54415adbdc3891f2ee",
   "noEngine": false
+=======
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"windows\"]\n  output   = \"./generated/client_enzymes\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/enzymes\"\n}\n\nmodel GeneralInfo {\n  id              Int     @id @default(autoincrement()) @db.UnsignedTinyInt\n  abbr            String  @db.VarChar(4)\n  full_name       String  @db.TinyText\n  year            Int     @db.Year\n  species         String  @db.TinyText\n  EC_number       String  @db.VarChar(14)\n  UniProt_number  String  @db.VarChar(10)\n  PDB_entries     String? @db.TinyText\n  molar_mass      Int     @db.UnsignedMediumInt\n  ext_coefficient Int     @db.UnsignedMediumInt\n  pathway_desc    String  @db.Text\n  assay_desc      String  @db.Text\n}\n",
+  "inlineSchemaHash": "9a940e56ad365fde1beee0e5260c27b9827933e7ff9ceb6c338780825588a0f7",
+  "copyEngine": true
+>>>>>>> Stashed changes
 }
 config.dirname = '/'
 
