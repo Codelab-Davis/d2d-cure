@@ -241,8 +241,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.10.2
-   * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+   * Prisma Client JS version: 5.13.0
+   * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
    */
   export type PrismaVersion = {
     client: string
@@ -369,6 +369,11 @@ export namespace Prisma {
     include: any
   }
 
+  type SelectAndOmit = {
+    select: any
+    omit: any
+  }
+
   /**
    * Get the type of the value, that the Promise holds.
    */
@@ -417,7 +422,9 @@ export namespace Prisma {
   } &
     (T extends SelectAndInclude
       ? 'Please either choose `select` or `include`.'
-      : {})
+      : T extends SelectAndOmit
+        ? 'Please either choose `select` or `omit`.'
+        : {})
 
   /**
    * Subset + Intersection
@@ -1185,6 +1192,7 @@ export namespace Prisma {
   }
 
 
+
   export type $InstitutionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Institutions"
     objects: {}
@@ -1599,7 +1607,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * Institutions findUnique
    */
@@ -1614,7 +1621,6 @@ export namespace Prisma {
     where: InstitutionsWhereUniqueInput
   }
 
-
   /**
    * Institutions findUniqueOrThrow
    */
@@ -1628,7 +1634,6 @@ export namespace Prisma {
      */
     where: InstitutionsWhereUniqueInput
   }
-
 
   /**
    * Institutions findFirst
@@ -1674,7 +1679,6 @@ export namespace Prisma {
     distinct?: InstitutionsScalarFieldEnum | InstitutionsScalarFieldEnum[]
   }
 
-
   /**
    * Institutions findFirstOrThrow
    */
@@ -1719,7 +1723,6 @@ export namespace Prisma {
     distinct?: InstitutionsScalarFieldEnum | InstitutionsScalarFieldEnum[]
   }
 
-
   /**
    * Institutions findMany
    */
@@ -1759,7 +1762,6 @@ export namespace Prisma {
     distinct?: InstitutionsScalarFieldEnum | InstitutionsScalarFieldEnum[]
   }
 
-
   /**
    * Institutions create
    */
@@ -1774,7 +1776,6 @@ export namespace Prisma {
     data: XOR<InstitutionsCreateInput, InstitutionsUncheckedCreateInput>
   }
 
-
   /**
    * Institutions createMany
    */
@@ -1785,7 +1786,6 @@ export namespace Prisma {
     data: InstitutionsCreateManyInput | InstitutionsCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * Institutions update
@@ -1805,7 +1805,6 @@ export namespace Prisma {
     where: InstitutionsWhereUniqueInput
   }
 
-
   /**
    * Institutions updateMany
    */
@@ -1819,7 +1818,6 @@ export namespace Prisma {
      */
     where?: InstitutionsWhereInput
   }
-
 
   /**
    * Institutions upsert
@@ -1843,7 +1841,6 @@ export namespace Prisma {
     update: XOR<InstitutionsUpdateInput, InstitutionsUncheckedUpdateInput>
   }
 
-
   /**
    * Institutions delete
    */
@@ -1858,7 +1855,6 @@ export namespace Prisma {
     where: InstitutionsWhereUniqueInput
   }
 
-
   /**
    * Institutions deleteMany
    */
@@ -1869,7 +1865,6 @@ export namespace Prisma {
     where?: InstitutionsWhereInput
   }
 
-
   /**
    * Institutions without action
    */
@@ -1879,7 +1874,6 @@ export namespace Prisma {
      */
     select?: InstitutionsSelect<ExtArgs> | null
   }
-
 
 
   /**
@@ -2152,6 +2146,7 @@ export namespace Prisma {
     approved?: boolean
     reg_date?: boolean
   }
+
 
 
   export type $UsersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2580,7 +2575,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * Users findUnique
    */
@@ -2595,7 +2589,6 @@ export namespace Prisma {
     where: UsersWhereUniqueInput
   }
 
-
   /**
    * Users findUniqueOrThrow
    */
@@ -2609,7 +2602,6 @@ export namespace Prisma {
      */
     where: UsersWhereUniqueInput
   }
-
 
   /**
    * Users findFirst
@@ -2655,7 +2647,6 @@ export namespace Prisma {
     distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
   }
 
-
   /**
    * Users findFirstOrThrow
    */
@@ -2700,7 +2691,6 @@ export namespace Prisma {
     distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
   }
 
-
   /**
    * Users findMany
    */
@@ -2740,7 +2730,6 @@ export namespace Prisma {
     distinct?: UsersScalarFieldEnum | UsersScalarFieldEnum[]
   }
 
-
   /**
    * Users create
    */
@@ -2755,7 +2744,6 @@ export namespace Prisma {
     data: XOR<UsersCreateInput, UsersUncheckedCreateInput>
   }
 
-
   /**
    * Users createMany
    */
@@ -2766,7 +2754,6 @@ export namespace Prisma {
     data: UsersCreateManyInput | UsersCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * Users update
@@ -2786,7 +2773,6 @@ export namespace Prisma {
     where: UsersWhereUniqueInput
   }
 
-
   /**
    * Users updateMany
    */
@@ -2800,7 +2786,6 @@ export namespace Prisma {
      */
     where?: UsersWhereInput
   }
-
 
   /**
    * Users upsert
@@ -2824,7 +2809,6 @@ export namespace Prisma {
     update: XOR<UsersUpdateInput, UsersUncheckedUpdateInput>
   }
 
-
   /**
    * Users delete
    */
@@ -2839,7 +2823,6 @@ export namespace Prisma {
     where: UsersWhereUniqueInput
   }
 
-
   /**
    * Users deleteMany
    */
@@ -2850,7 +2833,6 @@ export namespace Prisma {
     where?: UsersWhereInput
   }
 
-
   /**
    * Users without action
    */
@@ -2860,7 +2842,6 @@ export namespace Prisma {
      */
     select?: UsersSelect<ExtArgs> | null
   }
-
 
 
   /**

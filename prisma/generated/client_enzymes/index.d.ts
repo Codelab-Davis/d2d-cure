@@ -207,8 +207,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.10.2
-   * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+   * Prisma Client JS version: 5.13.0
+   * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
    */
   export type PrismaVersion = {
     client: string
@@ -335,6 +335,11 @@ export namespace Prisma {
     include: any
   }
 
+  type SelectAndOmit = {
+    select: any
+    omit: any
+  }
+
   /**
    * Get the type of the value, that the Promise holds.
    */
@@ -383,7 +388,9 @@ export namespace Prisma {
   } &
     (T extends SelectAndInclude
       ? 'Please either choose `select` or `include`.'
-      : {})
+      : T extends SelectAndOmit
+        ? 'Please either choose `select` or `omit`.'
+        : {})
 
   /**
    * Subset + Intersection
@@ -1150,6 +1157,7 @@ export namespace Prisma {
   }
 
 
+
   export type $GeneralInfoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "GeneralInfo"
     objects: {}
@@ -1576,7 +1584,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * GeneralInfo findUnique
    */
@@ -1591,7 +1598,6 @@ export namespace Prisma {
     where: GeneralInfoWhereUniqueInput
   }
 
-
   /**
    * GeneralInfo findUniqueOrThrow
    */
@@ -1605,7 +1611,6 @@ export namespace Prisma {
      */
     where: GeneralInfoWhereUniqueInput
   }
-
 
   /**
    * GeneralInfo findFirst
@@ -1651,7 +1656,6 @@ export namespace Prisma {
     distinct?: GeneralInfoScalarFieldEnum | GeneralInfoScalarFieldEnum[]
   }
 
-
   /**
    * GeneralInfo findFirstOrThrow
    */
@@ -1696,7 +1700,6 @@ export namespace Prisma {
     distinct?: GeneralInfoScalarFieldEnum | GeneralInfoScalarFieldEnum[]
   }
 
-
   /**
    * GeneralInfo findMany
    */
@@ -1736,7 +1739,6 @@ export namespace Prisma {
     distinct?: GeneralInfoScalarFieldEnum | GeneralInfoScalarFieldEnum[]
   }
 
-
   /**
    * GeneralInfo create
    */
@@ -1751,7 +1753,6 @@ export namespace Prisma {
     data: XOR<GeneralInfoCreateInput, GeneralInfoUncheckedCreateInput>
   }
 
-
   /**
    * GeneralInfo createMany
    */
@@ -1762,7 +1763,6 @@ export namespace Prisma {
     data: GeneralInfoCreateManyInput | GeneralInfoCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * GeneralInfo update
@@ -1782,7 +1782,6 @@ export namespace Prisma {
     where: GeneralInfoWhereUniqueInput
   }
 
-
   /**
    * GeneralInfo updateMany
    */
@@ -1796,7 +1795,6 @@ export namespace Prisma {
      */
     where?: GeneralInfoWhereInput
   }
-
 
   /**
    * GeneralInfo upsert
@@ -1820,7 +1818,6 @@ export namespace Prisma {
     update: XOR<GeneralInfoUpdateInput, GeneralInfoUncheckedUpdateInput>
   }
 
-
   /**
    * GeneralInfo delete
    */
@@ -1835,7 +1832,6 @@ export namespace Prisma {
     where: GeneralInfoWhereUniqueInput
   }
 
-
   /**
    * GeneralInfo deleteMany
    */
@@ -1846,7 +1842,6 @@ export namespace Prisma {
     where?: GeneralInfoWhereInput
   }
 
-
   /**
    * GeneralInfo without action
    */
@@ -1856,7 +1851,6 @@ export namespace Prisma {
      */
     select?: GeneralInfoSelect<ExtArgs> | null
   }
-
 
 
   /**

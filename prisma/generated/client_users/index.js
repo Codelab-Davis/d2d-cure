@@ -21,7 +21,7 @@ const {
   warnOnce,
   defineDmmfProperty,
   Public,
-  detectRuntime,
+  getRuntime
 } = require('./runtime/library.js')
 
 
@@ -31,12 +31,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.10.2
- * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+ * Prisma Client JS version: 5.13.0
+ * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
  */
 Prisma.prismaVersion = {
-  client: "5.10.2",
-  engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
+  client: "5.13.0",
+  engine: "b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -143,7 +143,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\visha\\CodeLab\\D2D WSQ24\\d2d-cure\\prisma\\generated\\client_users",
+      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_users",
       "fromEnvVar": null
     },
     "config": {
@@ -152,8 +152,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
@@ -163,8 +167,8 @@ const config = {
     "rootEnvPath": null
   },
   "relativePath": "../..",
-  "clientVersion": "5.10.2",
-  "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
+  "clientVersion": "5.13.0",
+  "engineVersion": "b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b",
   "datasourceNames": [
     "db"
   ],
@@ -178,8 +182,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client_users\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/users\"\n}\n\nmodel Institutions {\n  id           Int     @id @default(autoincrement()) @db.UnsignedSmallInt\n  fullname     String  @db.VarChar(64)\n  abbr         String  @db.VarChar(12)\n  state        String? @db.VarChar(2)\n  country_code String  @default(\"USA\") @db.VarChar(3)\n  url          String? @db.VarChar(100)\n}\n\nmodel Users {\n  id             Int          @id @default(autoincrement()) @db.UnsignedSmallInt\n  user_name      String       @db.VarChar(30)\n  given_name     String       @db.VarChar(30)\n  title          String?      @db.VarChar(50)\n  pi             String?      @db.VarChar(30)\n  institution    String       @db.VarChar(50)\n  status         Users_status\n  email          String       @db.VarChar(50)\n  password       String       @db.VarChar(30)\n  image_filename String       @db.VarChar(84)\n  approved       Boolean\n  reg_date       DateTime     @default(now()) @db.Timestamp(0)\n}\n\nenum Users_status {\n  ADMIN\n  student\n  professor\n  other\n}\n",
-  "inlineSchemaHash": "98f449dccfd1a66627d7a3b6ddc0334140ace2d49cdf6d751172bee3a7a61aef",
+  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  binaryTargets = [\"native\", \"windows\"]\r\n  output   = \"./generated/client_users\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/users\"\r\n}\r\n\r\nmodel Institutions {\r\n  id           Int     @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  fullname     String  @db.VarChar(64)\r\n  abbr         String  @db.VarChar(12)\r\n  state        String? @db.VarChar(2)\r\n  country_code String  @default(\"USA\") @db.VarChar(3)\r\n  url          String? @db.VarChar(100)\r\n}\r\n\r\nmodel Users {\r\n  id             Int          @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  user_name      String       @db.VarChar(30)\r\n  given_name     String       @db.VarChar(30)\r\n  title          String?      @db.VarChar(50)\r\n  pi             String?      @db.VarChar(30)\r\n  institution    String       @db.VarChar(50)\r\n  status         Users_status\r\n  email          String       @db.VarChar(50)\r\n  password       String       @db.VarChar(30)\r\n  image_filename String       @db.VarChar(84)\r\n  approved       Boolean\r\n  reg_date       DateTime     @default(now()) @db.Timestamp(0)\r\n}\r\n\r\nenum Users_status {\r\n  ADMIN\r\n  student\r\n  professor\r\n  other\r\n}\r\n",
+  "inlineSchemaHash": "74496f588d00e45b8de383778e1783dc7a0707b43b098cc2bce9ea841fab4f8a",
   "copyEngine": true
 }
 
@@ -217,8 +221,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-darwin.dylib.node");
-path.join(process.cwd(), "generated/client_users/libquery_engine-darwin.dylib.node")
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "generated/client_users/query_engine-windows.dll.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/client_users/schema.prisma")

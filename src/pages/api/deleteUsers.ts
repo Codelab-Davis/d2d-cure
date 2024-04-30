@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client_users';
-
-const prisma = new PrismaClient();
+import prismaUsers from "../../../prismaUsersClient";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'POST') {
@@ -9,7 +7,7 @@ export default async function handler(req: any, res: any) {
     try {
 
       const updatedUsers = await Promise.all(userIds.map(async (userId: string) => {
-        return await prisma.users.deleteMany({
+        return await prismaUsers.users.deleteMany({
           where: {
             id: parseInt(userId),
           }

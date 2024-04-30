@@ -1,11 +1,9 @@
-import { PrismaClient } from '../../../prisma/generated/client_users';
-
-const prisma = new PrismaClient();
+import prismaUsers from "../../../prismaUsersClient";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'GET') {
     try {
-      const users = await prisma.users.findMany({
+      const users = await prismaUsers.users.findMany({
         where: {
           OR: [
             {

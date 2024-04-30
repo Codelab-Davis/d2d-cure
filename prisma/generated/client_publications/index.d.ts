@@ -207,8 +207,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.10.2
-   * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+   * Prisma Client JS version: 5.13.0
+   * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
    */
   export type PrismaVersion = {
     client: string
@@ -335,6 +335,11 @@ export namespace Prisma {
     include: any
   }
 
+  type SelectAndOmit = {
+    select: any
+    omit: any
+  }
+
   /**
    * Get the type of the value, that the Promise holds.
    */
@@ -383,7 +388,9 @@ export namespace Prisma {
   } &
     (T extends SelectAndInclude
       ? 'Please either choose `select` or `include`.'
-      : {})
+      : T extends SelectAndOmit
+        ? 'Please either choose `select` or `omit`.'
+        : {})
 
   /**
    * Subset + Intersection
@@ -1141,6 +1148,7 @@ export namespace Prisma {
   }
 
 
+
   export type $PapersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Papers"
     objects: {}
@@ -1565,7 +1573,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * Papers findUnique
    */
@@ -1580,7 +1587,6 @@ export namespace Prisma {
     where: PapersWhereUniqueInput
   }
 
-
   /**
    * Papers findUniqueOrThrow
    */
@@ -1594,7 +1600,6 @@ export namespace Prisma {
      */
     where: PapersWhereUniqueInput
   }
-
 
   /**
    * Papers findFirst
@@ -1640,7 +1645,6 @@ export namespace Prisma {
     distinct?: PapersScalarFieldEnum | PapersScalarFieldEnum[]
   }
 
-
   /**
    * Papers findFirstOrThrow
    */
@@ -1685,7 +1689,6 @@ export namespace Prisma {
     distinct?: PapersScalarFieldEnum | PapersScalarFieldEnum[]
   }
 
-
   /**
    * Papers findMany
    */
@@ -1725,7 +1728,6 @@ export namespace Prisma {
     distinct?: PapersScalarFieldEnum | PapersScalarFieldEnum[]
   }
 
-
   /**
    * Papers create
    */
@@ -1740,7 +1742,6 @@ export namespace Prisma {
     data?: XOR<PapersCreateInput, PapersUncheckedCreateInput>
   }
 
-
   /**
    * Papers createMany
    */
@@ -1751,7 +1752,6 @@ export namespace Prisma {
     data: PapersCreateManyInput | PapersCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * Papers update
@@ -1771,7 +1771,6 @@ export namespace Prisma {
     where: PapersWhereUniqueInput
   }
 
-
   /**
    * Papers updateMany
    */
@@ -1785,7 +1784,6 @@ export namespace Prisma {
      */
     where?: PapersWhereInput
   }
-
 
   /**
    * Papers upsert
@@ -1809,7 +1807,6 @@ export namespace Prisma {
     update: XOR<PapersUpdateInput, PapersUncheckedUpdateInput>
   }
 
-
   /**
    * Papers delete
    */
@@ -1824,7 +1821,6 @@ export namespace Prisma {
     where: PapersWhereUniqueInput
   }
 
-
   /**
    * Papers deleteMany
    */
@@ -1835,7 +1831,6 @@ export namespace Prisma {
     where?: PapersWhereInput
   }
 
-
   /**
    * Papers without action
    */
@@ -1845,7 +1840,6 @@ export namespace Prisma {
      */
     select?: PapersSelect<ExtArgs> | null
   }
-
 
 
   /**

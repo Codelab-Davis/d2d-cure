@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client_users';
-
-const prisma = new PrismaClient();
+import prismaUsers from "../../../prismaUsersClient";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'POST') {
@@ -14,7 +12,7 @@ export default async function handler(req: any, res: any) {
       email,
       password } = req.body;
     try {
-      const newUser = await prisma.users.create({
+      const newUser = await prismaUsers.users.create({
         data: {
           user_name,
           given_name,

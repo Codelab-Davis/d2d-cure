@@ -314,8 +314,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 5.10.2
-   * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+   * Prisma Client JS version: 5.13.0
+   * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
    */
   export type PrismaVersion = {
     client: string
@@ -442,6 +442,11 @@ export namespace Prisma {
     include: any
   }
 
+  type SelectAndOmit = {
+    select: any
+    omit: any
+  }
+
   /**
    * Get the type of the value, that the Promise holds.
    */
@@ -490,7 +495,9 @@ export namespace Prisma {
   } &
     (T extends SelectAndInclude
       ? 'Please either choose `select` or `include`.'
-      : {})
+      : T extends SelectAndOmit
+        ? 'Please either choose `select` or `omit`.'
+        : {})
 
   /**
    * Subset + Intersection
@@ -1853,6 +1860,7 @@ export namespace Prisma {
   }
 
 
+
   export type $CharacterizationDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "CharacterizationData"
     objects: {}
@@ -2335,7 +2343,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * CharacterizationData findUnique
    */
@@ -2350,7 +2357,6 @@ export namespace Prisma {
     where: CharacterizationDataWhereUniqueInput
   }
 
-
   /**
    * CharacterizationData findUniqueOrThrow
    */
@@ -2364,7 +2370,6 @@ export namespace Prisma {
      */
     where: CharacterizationDataWhereUniqueInput
   }
-
 
   /**
    * CharacterizationData findFirst
@@ -2410,7 +2415,6 @@ export namespace Prisma {
     distinct?: CharacterizationDataScalarFieldEnum | CharacterizationDataScalarFieldEnum[]
   }
 
-
   /**
    * CharacterizationData findFirstOrThrow
    */
@@ -2455,7 +2459,6 @@ export namespace Prisma {
     distinct?: CharacterizationDataScalarFieldEnum | CharacterizationDataScalarFieldEnum[]
   }
 
-
   /**
    * CharacterizationData findMany
    */
@@ -2495,7 +2498,6 @@ export namespace Prisma {
     distinct?: CharacterizationDataScalarFieldEnum | CharacterizationDataScalarFieldEnum[]
   }
 
-
   /**
    * CharacterizationData create
    */
@@ -2510,7 +2512,6 @@ export namespace Prisma {
     data: XOR<CharacterizationDataCreateInput, CharacterizationDataUncheckedCreateInput>
   }
 
-
   /**
    * CharacterizationData createMany
    */
@@ -2521,7 +2522,6 @@ export namespace Prisma {
     data: CharacterizationDataCreateManyInput | CharacterizationDataCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * CharacterizationData update
@@ -2541,7 +2541,6 @@ export namespace Prisma {
     where: CharacterizationDataWhereUniqueInput
   }
 
-
   /**
    * CharacterizationData updateMany
    */
@@ -2555,7 +2554,6 @@ export namespace Prisma {
      */
     where?: CharacterizationDataWhereInput
   }
-
 
   /**
    * CharacterizationData upsert
@@ -2579,7 +2577,6 @@ export namespace Prisma {
     update: XOR<CharacterizationDataUpdateInput, CharacterizationDataUncheckedUpdateInput>
   }
 
-
   /**
    * CharacterizationData delete
    */
@@ -2594,7 +2591,6 @@ export namespace Prisma {
     where: CharacterizationDataWhereUniqueInput
   }
 
-
   /**
    * CharacterizationData deleteMany
    */
@@ -2605,7 +2601,6 @@ export namespace Prisma {
     where?: CharacterizationDataWhereInput
   }
 
-
   /**
    * CharacterizationData without action
    */
@@ -2615,7 +2610,6 @@ export namespace Prisma {
      */
     select?: CharacterizationDataSelect<ExtArgs> | null
   }
-
 
 
   /**
@@ -2949,6 +2943,7 @@ export namespace Prisma {
     parent_id?: boolean
     approved_by_student?: boolean
   }
+
 
 
   export type $KineticRawDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3387,7 +3382,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * KineticRawData findUnique
    */
@@ -3402,7 +3396,6 @@ export namespace Prisma {
     where: KineticRawDataWhereUniqueInput
   }
 
-
   /**
    * KineticRawData findUniqueOrThrow
    */
@@ -3416,7 +3409,6 @@ export namespace Prisma {
      */
     where: KineticRawDataWhereUniqueInput
   }
-
 
   /**
    * KineticRawData findFirst
@@ -3462,7 +3454,6 @@ export namespace Prisma {
     distinct?: KineticRawDataScalarFieldEnum | KineticRawDataScalarFieldEnum[]
   }
 
-
   /**
    * KineticRawData findFirstOrThrow
    */
@@ -3507,7 +3498,6 @@ export namespace Prisma {
     distinct?: KineticRawDataScalarFieldEnum | KineticRawDataScalarFieldEnum[]
   }
 
-
   /**
    * KineticRawData findMany
    */
@@ -3547,7 +3537,6 @@ export namespace Prisma {
     distinct?: KineticRawDataScalarFieldEnum | KineticRawDataScalarFieldEnum[]
   }
 
-
   /**
    * KineticRawData create
    */
@@ -3562,7 +3551,6 @@ export namespace Prisma {
     data: XOR<KineticRawDataCreateInput, KineticRawDataUncheckedCreateInput>
   }
 
-
   /**
    * KineticRawData createMany
    */
@@ -3573,7 +3561,6 @@ export namespace Prisma {
     data: KineticRawDataCreateManyInput | KineticRawDataCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * KineticRawData update
@@ -3593,7 +3580,6 @@ export namespace Prisma {
     where: KineticRawDataWhereUniqueInput
   }
 
-
   /**
    * KineticRawData updateMany
    */
@@ -3607,7 +3593,6 @@ export namespace Prisma {
      */
     where?: KineticRawDataWhereInput
   }
-
 
   /**
    * KineticRawData upsert
@@ -3631,7 +3616,6 @@ export namespace Prisma {
     update: XOR<KineticRawDataUpdateInput, KineticRawDataUncheckedUpdateInput>
   }
 
-
   /**
    * KineticRawData delete
    */
@@ -3646,7 +3630,6 @@ export namespace Prisma {
     where: KineticRawDataWhereUniqueInput
   }
 
-
   /**
    * KineticRawData deleteMany
    */
@@ -3657,7 +3640,6 @@ export namespace Prisma {
     where?: KineticRawDataWhereInput
   }
 
-
   /**
    * KineticRawData without action
    */
@@ -3667,7 +3649,6 @@ export namespace Prisma {
      */
     select?: KineticRawDataSelect<ExtArgs> | null
   }
-
 
 
   /**
@@ -3859,6 +3840,7 @@ export namespace Prisma {
     variant?: boolean
     oligo?: boolean
   }
+
 
 
   export type $OligosPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4269,7 +4251,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * Oligos findUnique
    */
@@ -4284,7 +4265,6 @@ export namespace Prisma {
     where: OligosWhereUniqueInput
   }
 
-
   /**
    * Oligos findUniqueOrThrow
    */
@@ -4298,7 +4278,6 @@ export namespace Prisma {
      */
     where: OligosWhereUniqueInput
   }
-
 
   /**
    * Oligos findFirst
@@ -4344,7 +4323,6 @@ export namespace Prisma {
     distinct?: OligosScalarFieldEnum | OligosScalarFieldEnum[]
   }
 
-
   /**
    * Oligos findFirstOrThrow
    */
@@ -4389,7 +4367,6 @@ export namespace Prisma {
     distinct?: OligosScalarFieldEnum | OligosScalarFieldEnum[]
   }
 
-
   /**
    * Oligos findMany
    */
@@ -4429,7 +4406,6 @@ export namespace Prisma {
     distinct?: OligosScalarFieldEnum | OligosScalarFieldEnum[]
   }
 
-
   /**
    * Oligos create
    */
@@ -4444,7 +4420,6 @@ export namespace Prisma {
     data: XOR<OligosCreateInput, OligosUncheckedCreateInput>
   }
 
-
   /**
    * Oligos createMany
    */
@@ -4455,7 +4430,6 @@ export namespace Prisma {
     data: OligosCreateManyInput | OligosCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * Oligos update
@@ -4475,7 +4449,6 @@ export namespace Prisma {
     where: OligosWhereUniqueInput
   }
 
-
   /**
    * Oligos updateMany
    */
@@ -4489,7 +4462,6 @@ export namespace Prisma {
      */
     where?: OligosWhereInput
   }
-
 
   /**
    * Oligos upsert
@@ -4513,7 +4485,6 @@ export namespace Prisma {
     update: XOR<OligosUpdateInput, OligosUncheckedUpdateInput>
   }
 
-
   /**
    * Oligos delete
    */
@@ -4528,7 +4499,6 @@ export namespace Prisma {
     where: OligosWhereUniqueInput
   }
 
-
   /**
    * Oligos deleteMany
    */
@@ -4539,7 +4509,6 @@ export namespace Prisma {
     where?: OligosWhereInput
   }
 
-
   /**
    * Oligos without action
    */
@@ -4549,7 +4518,6 @@ export namespace Prisma {
      */
     select?: OligosSelect<ExtArgs> | null
   }
-
 
 
   /**
@@ -4763,6 +4731,7 @@ export namespace Prisma {
     PDBresnum?: boolean
     resid?: boolean
   }
+
 
 
   export type $SequencePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5177,7 +5146,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * Sequence findUnique
    */
@@ -5192,7 +5160,6 @@ export namespace Prisma {
     where: SequenceWhereUniqueInput
   }
 
-
   /**
    * Sequence findUniqueOrThrow
    */
@@ -5206,7 +5173,6 @@ export namespace Prisma {
      */
     where: SequenceWhereUniqueInput
   }
-
 
   /**
    * Sequence findFirst
@@ -5252,7 +5218,6 @@ export namespace Prisma {
     distinct?: SequenceScalarFieldEnum | SequenceScalarFieldEnum[]
   }
 
-
   /**
    * Sequence findFirstOrThrow
    */
@@ -5297,7 +5262,6 @@ export namespace Prisma {
     distinct?: SequenceScalarFieldEnum | SequenceScalarFieldEnum[]
   }
 
-
   /**
    * Sequence findMany
    */
@@ -5337,7 +5301,6 @@ export namespace Prisma {
     distinct?: SequenceScalarFieldEnum | SequenceScalarFieldEnum[]
   }
 
-
   /**
    * Sequence create
    */
@@ -5352,7 +5315,6 @@ export namespace Prisma {
     data: XOR<SequenceCreateInput, SequenceUncheckedCreateInput>
   }
 
-
   /**
    * Sequence createMany
    */
@@ -5363,7 +5325,6 @@ export namespace Prisma {
     data: SequenceCreateManyInput | SequenceCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * Sequence update
@@ -5383,7 +5344,6 @@ export namespace Prisma {
     where: SequenceWhereUniqueInput
   }
 
-
   /**
    * Sequence updateMany
    */
@@ -5397,7 +5357,6 @@ export namespace Prisma {
      */
     where?: SequenceWhereInput
   }
-
 
   /**
    * Sequence upsert
@@ -5421,7 +5380,6 @@ export namespace Prisma {
     update: XOR<SequenceUpdateInput, SequenceUncheckedUpdateInput>
   }
 
-
   /**
    * Sequence delete
    */
@@ -5436,7 +5394,6 @@ export namespace Prisma {
     where: SequenceWhereUniqueInput
   }
 
-
   /**
    * Sequence deleteMany
    */
@@ -5447,7 +5404,6 @@ export namespace Prisma {
     where?: SequenceWhereInput
   }
 
-
   /**
    * Sequence without action
    */
@@ -5457,7 +5413,6 @@ export namespace Prisma {
      */
     select?: SequenceSelect<ExtArgs> | null
   }
-
 
 
   /**
@@ -5752,6 +5707,7 @@ export namespace Prisma {
     parent_id?: boolean
     approved_by_student?: boolean
   }
+
 
 
   export type $TempRawDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6184,7 +6140,6 @@ export namespace Prisma {
     
 
   // Custom InputTypes
-
   /**
    * TempRawData findUnique
    */
@@ -6199,7 +6154,6 @@ export namespace Prisma {
     where: TempRawDataWhereUniqueInput
   }
 
-
   /**
    * TempRawData findUniqueOrThrow
    */
@@ -6213,7 +6167,6 @@ export namespace Prisma {
      */
     where: TempRawDataWhereUniqueInput
   }
-
 
   /**
    * TempRawData findFirst
@@ -6259,7 +6212,6 @@ export namespace Prisma {
     distinct?: TempRawDataScalarFieldEnum | TempRawDataScalarFieldEnum[]
   }
 
-
   /**
    * TempRawData findFirstOrThrow
    */
@@ -6304,7 +6256,6 @@ export namespace Prisma {
     distinct?: TempRawDataScalarFieldEnum | TempRawDataScalarFieldEnum[]
   }
 
-
   /**
    * TempRawData findMany
    */
@@ -6344,7 +6295,6 @@ export namespace Prisma {
     distinct?: TempRawDataScalarFieldEnum | TempRawDataScalarFieldEnum[]
   }
 
-
   /**
    * TempRawData create
    */
@@ -6359,7 +6309,6 @@ export namespace Prisma {
     data: XOR<TempRawDataCreateInput, TempRawDataUncheckedCreateInput>
   }
 
-
   /**
    * TempRawData createMany
    */
@@ -6370,7 +6319,6 @@ export namespace Prisma {
     data: TempRawDataCreateManyInput | TempRawDataCreateManyInput[]
     skipDuplicates?: boolean
   }
-
 
   /**
    * TempRawData update
@@ -6390,7 +6338,6 @@ export namespace Prisma {
     where: TempRawDataWhereUniqueInput
   }
 
-
   /**
    * TempRawData updateMany
    */
@@ -6404,7 +6351,6 @@ export namespace Prisma {
      */
     where?: TempRawDataWhereInput
   }
-
 
   /**
    * TempRawData upsert
@@ -6428,7 +6374,6 @@ export namespace Prisma {
     update: XOR<TempRawDataUpdateInput, TempRawDataUncheckedUpdateInput>
   }
 
-
   /**
    * TempRawData delete
    */
@@ -6443,7 +6388,6 @@ export namespace Prisma {
     where: TempRawDataWhereUniqueInput
   }
 
-
   /**
    * TempRawData deleteMany
    */
@@ -6454,7 +6398,6 @@ export namespace Prisma {
     where?: TempRawDataWhereInput
   }
 
-
   /**
    * TempRawData without action
    */
@@ -6464,7 +6407,6 @@ export namespace Prisma {
      */
     select?: TempRawDataSelect<ExtArgs> | null
   }
-
 
 
   /**

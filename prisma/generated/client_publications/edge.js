@@ -21,7 +21,7 @@ const {
   warnOnce,
   defineDmmfProperty,
   Public,
-  detectRuntime,
+  getRuntime
 } = require('./runtime/edge.js')
 
 
@@ -31,12 +31,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.10.2
- * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+ * Prisma Client JS version: 5.13.0
+ * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
  */
 Prisma.prismaVersion = {
-  client: "5.10.2",
-  engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
+  client: "5.13.0",
+  engine: "b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -126,7 +126,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\visha\\CodeLab\\D2D WSQ24\\d2d-cure\\prisma\\generated\\client_publications",
+      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_publications",
       "fromEnvVar": null
     },
     "config": {
@@ -135,8 +135,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
@@ -146,8 +150,8 @@ const config = {
     "rootEnvPath": null
   },
   "relativePath": "../..",
-  "clientVersion": "5.10.2",
-  "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
+  "clientVersion": "5.13.0",
+  "engineVersion": "b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b",
   "datasourceNames": [
     "db"
   ],
@@ -161,8 +165,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client_publications\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/publications\"\n}\n\nmodel Papers {\n  id          Int     @id @default(autoincrement()) @db.UnsignedSmallInt\n  author1     String? @db.TinyText\n  all_authors String? @db.Text\n  year        Int?    @db.Year\n  title       String? @db.Text\n  journal     String? @db.Text\n  volume      Int?    @db.UnsignedSmallInt\n  issue       Int?    @db.UnsignedTinyInt\n  first_page  String? @db.TinyText\n  last_page   String? @db.TinyText\n  link        String? @db.Text\n}\n",
-  "inlineSchemaHash": "7fbdea24811dca10d270936158b8db416e1b2b35b16b068260ff618421883348",
+  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  binaryTargets = [\"native\", \"windows\"]\r\n  output   = \"./generated/client_publications\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/publications\"\r\n}\r\n\r\nmodel Papers {\r\n  id          Int     @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  author1     String? @db.TinyText\r\n  all_authors String? @db.Text\r\n  year        Int?    @db.Year\r\n  title       String? @db.Text\r\n  journal     String? @db.Text\r\n  volume      Int?    @db.UnsignedSmallInt\r\n  issue       Int?    @db.UnsignedTinyInt\r\n  first_page  String? @db.TinyText\r\n  last_page   String? @db.TinyText\r\n  link        String? @db.Text\r\n}\r\n",
+  "inlineSchemaHash": "adfd9867b2adcdd5df1f2ffc4800df65309931ef7e8519bf973976385ea400d5",
   "copyEngine": true
 }
 config.dirname = '/'

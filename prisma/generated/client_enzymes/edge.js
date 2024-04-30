@@ -21,7 +21,7 @@ const {
   warnOnce,
   defineDmmfProperty,
   Public,
-  detectRuntime,
+  getRuntime
 } = require('./runtime/edge.js')
 
 
@@ -31,12 +31,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.10.2
- * Query Engine version: 5a9203d0590c951969e85a7d07215503f4672eb9
+ * Prisma Client JS version: 5.13.0
+ * Query Engine version: b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b
  */
 Prisma.prismaVersion = {
-  client: "5.10.2",
-  engine: "5a9203d0590c951969e85a7d07215503f4672eb9"
+  client: "5.13.0",
+  engine: "b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -127,7 +127,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\visha\\CodeLab\\D2D WSQ24\\d2d-cure\\prisma\\generated\\client_enzymes",
+      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_enzymes",
       "fromEnvVar": null
     },
     "config": {
@@ -136,8 +136,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin",
+        "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
@@ -147,8 +151,8 @@ const config = {
     "rootEnvPath": null
   },
   "relativePath": "../..",
-  "clientVersion": "5.10.2",
-  "engineVersion": "5a9203d0590c951969e85a7d07215503f4672eb9",
+  "clientVersion": "5.13.0",
+  "engineVersion": "b9a39a7ee606c28e3455d0fd60e78c3ba82b1a2b",
   "datasourceNames": [
     "db"
   ],
@@ -162,8 +166,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client_enzymes\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/enzymes\"\n}\n\nmodel GeneralInfo {\n  id              Int     @id @default(autoincrement()) @db.UnsignedTinyInt\n  abbr            String  @db.VarChar(4)\n  full_name       String  @db.TinyText\n  year            Int     @db.Year\n  species         String  @db.TinyText\n  EC_number       String  @db.VarChar(14)\n  UniProt_number  String  @db.VarChar(10)\n  PDB_entries     String? @db.TinyText\n  molar_mass      Int     @db.UnsignedMediumInt\n  ext_coefficient Int     @db.UnsignedMediumInt\n  pathway_desc    String  @db.Text\n  assay_desc      String  @db.Text\n}\n",
-  "inlineSchemaHash": "6e478065b4889e11d061a0d7eec245a852ff7cc284807d54415adbdc3891f2ee",
+  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  binaryTargets = [\"native\", \"windows\"]\r\n  output   = \"./generated/client_enzymes\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/enzymes\"\r\n}\r\n\r\nmodel GeneralInfo {\r\n  id              Int     @id @default(autoincrement()) @db.UnsignedTinyInt\r\n  abbr            String  @db.VarChar(4)\r\n  full_name       String  @db.TinyText\r\n  year            Int     @db.Year\r\n  species         String  @db.TinyText\r\n  EC_number       String  @db.VarChar(14)\r\n  UniProt_number  String  @db.VarChar(10)\r\n  PDB_entries     String? @db.TinyText\r\n  molar_mass      Int     @db.UnsignedMediumInt\r\n  ext_coefficient Int     @db.UnsignedMediumInt\r\n  pathway_desc    String  @db.Text\r\n  assay_desc      String  @db.Text\r\n}\r\n",
+  "inlineSchemaHash": "1979c97cd8eebe1f4be5e5538d2ffa5a349e3aec7c266b3ba699c140b909dd8e",
   "copyEngine": true
 }
 config.dirname = '/'

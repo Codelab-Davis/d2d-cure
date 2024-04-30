@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client_users';
-
-const prisma = new PrismaClient();
+import prismaUsers from "../../../prismaUsersClient";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'POST') {
@@ -11,7 +9,7 @@ export default async function handler(req: any, res: any) {
 
       // Iterate over each user ID and update the corresponding user
       const updatedUsers = await Promise.all(userIds.map(async (userId: string) => {
-        return await prisma.users.update({
+        return await prismaUsers.users.update({
           where: {
             id: parseInt(userId),
           },
