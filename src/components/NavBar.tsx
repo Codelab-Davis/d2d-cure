@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { useUser } from '@/components/UserProvider';
 
 const NavBar = () => {
-  const { user } = useUser(); 
-  
-  console.log(user); 
+  const { user } = useUser();
+
+  console.log(user);
   return (
     <nav className="bg-gray-800 text-white flex justify-between items-center p-4">
       {/* Database Dropdown */}
@@ -22,7 +22,7 @@ const NavBar = () => {
             </Link>
           )}
           {/* Further conditionally render "Curate Data" if user.status is "professor" */}
-          {user?.status === "professor" && (
+          {(user?.status === "professor" || user?.status === "ADMIN") && (
             <Link href="/curate">
               <span className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Curate Data</span>
             </Link>

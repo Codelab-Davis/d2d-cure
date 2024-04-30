@@ -142,7 +142,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Hussain\\Desktop\\d2d-cure\\prisma\\generated\\client_users",
+      "value": "C:\\Users\\visha\\CodeLab\\D2D WSQ24\\d2d-cure\\prisma\\generated\\client_users",
       "fromEnvVar": null
     },
     "config": {
@@ -151,7 +151,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin",
         "native": true
       }
     ],
@@ -177,8 +177,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  output   = \"./generated/client_users\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/users\"\r\n}\r\n\r\nmodel Institutions {\r\n  id           Int     @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  fullname     String  @db.VarChar(64)\r\n  abbr         String  @db.VarChar(12)\r\n  state        String? @db.VarChar(2)\r\n  country_code String  @default(\"USA\") @db.VarChar(3)\r\n  url          String? @db.VarChar(100)\r\n}\r\n\r\nmodel Users {\r\n  id             Int          @id @default(autoincrement()) @db.UnsignedSmallInt\r\n  user_name      String       @db.VarChar(30)\r\n  given_name     String       @db.VarChar(30)\r\n  title          String?      @db.VarChar(50)\r\n  pi             String?      @db.VarChar(30)\r\n  institution    String       @db.VarChar(50)\r\n  status         Users_status\r\n  email          String       @db.VarChar(50)\r\n  password       String       @db.VarChar(30)\r\n  image_filename String       @db.VarChar(84)\r\n  approved       Boolean\r\n  reg_date       DateTime     @default(now()) @db.Timestamp(0)\r\n}\r\n\r\nenum Users_status {\r\n  ADMIN\r\n  student\r\n  professor\r\n  other\r\n}\r\n",
-  "inlineSchemaHash": "feca2b6711d459ae21624a5c1c8a751002cd5b034677e6dffbfe9e077434f723",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client_users\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/users\"\n}\n\nmodel Institutions {\n  id           Int     @id @default(autoincrement()) @db.UnsignedSmallInt\n  fullname     String  @db.VarChar(64)\n  abbr         String  @db.VarChar(12)\n  state        String? @db.VarChar(2)\n  country_code String  @default(\"USA\") @db.VarChar(3)\n  url          String? @db.VarChar(100)\n}\n\nmodel Users {\n  id             Int          @id @default(autoincrement()) @db.UnsignedSmallInt\n  user_name      String       @db.VarChar(30)\n  given_name     String       @db.VarChar(30)\n  title          String?      @db.VarChar(50)\n  pi             String?      @db.VarChar(30)\n  institution    String       @db.VarChar(50)\n  status         Users_status\n  email          String       @db.VarChar(50)\n  password       String       @db.VarChar(30)\n  image_filename String       @db.VarChar(84)\n  approved       Boolean\n  reg_date       DateTime     @default(now()) @db.Timestamp(0)\n}\n\nenum Users_status {\n  ADMIN\n  student\n  professor\n  other\n}\n",
+  "inlineSchemaHash": "98f449dccfd1a66627d7a3b6ddc0334140ace2d49cdf6d751172bee3a7a61aef",
   "copyEngine": true
 }
 config.dirname = '/'
