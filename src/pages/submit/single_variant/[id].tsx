@@ -1,8 +1,9 @@
-// This is the page for both VIEWING an existing dataset, or EDITING one that was just created 
+// This is the page for both VIEWING and EDITING (& updating) an existing dataset 
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@/components/UserProvider';
+import axios from 'axios';
 import Papa from 'papaparse';
 
 const SingleVariant = () => {
@@ -10,8 +11,16 @@ const SingleVariant = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const [characterizationData, setCharacterizationData] = useState<any[]>([]);
+  const [kineticRawData, setKineticRawData] = useState<any[]>([]);
   const [entryData, setEntryData] = useState<any>([]);
 
+  const [oligosData, setOligosData] = useState<any[]>([]);
+  const [oligosDisplay, setOligosDisplay] = useState("");
+  const [possibleTeammates, setPossibleTeammates] = useState<any>([]);
+  const [teammate1, setTeammate1] = useState<any>([]);
+  const [teammate2, setTeammate2] = useState<any>([]);
+  const [teammate3, setTeammate3] = useState<any>([]);
   const [WT, setWT] = useState<any>('');
   const [variant, setVariant] = useState<any>('');
   const [oligoOrdered, setOligoOrdered] = useState<any>(0);
@@ -19,11 +28,12 @@ const SingleVariant = () => {
   const [plasmidVerified, setPlasmidVerified] = useState<any>(0); 
   const [ab1Filename, setAb1Filename] = useState<any>(''); 
   const [expressed, setExpressed] = useState<any>(0);
-  const [kineticAssayFile, setKineticAssayFile] = useState<File | null>(null);
-  const [kineticAssayData, setKineticAssayData] = useState<Array<any>>([]);
-
-
-
+  const [kineticAssayData, setKineticAssayData] = useState<Array<any>>([]); // the parsed CSV for table display 
+  const [variantName, setVariantName] = useState<String>();
+  const [showWTDataOptions, setShowWTDataOptions] = useState(false);
+  const [rawDataIds, setRawDataIds] = useState<number[]>([]);
+  const [kineticWTId, setKineticWTId] = useState<any>(0);
+  const [kineticData, setKineticData] = useState<any[]>([]); // the filtered data from KineticRawData table, for the WT selection 
 
 
 
@@ -41,12 +51,58 @@ const SingleVariant = () => {
         console.error('Error fetching entry data:', error);
       }
     };
+    const fetchData = async () => {
+      const response = await fetch('/api/getCharacterizationData');
+      const data = await response.json();
+      const filteredData = data.filter((row:any) => row.institution === user?.institution && row.resid === "X");
+      const ids = filteredData.map((row:any) => row.raw_data_id).filter((id:any) => id !== 0); 
+      setRawDataIds(ids);
+      console.log(ids); 
+    };
+    const fetchOligosData = async () => {
+      const response = await fetch('/api/getOligos');
+      const data = await response.json();
+      setOligosData(data);
+    };
+    const fetchPossibleTeammates = async () => {
+      if (user?.pi) {
+        const response = await fetch(`/api/getUsersFromPI?pi=${encodeURIComponent(user.pi)}`);
+        const data = await response.json();
+        setPossibleTeammates(data);
+      }
+    };
 
     fetchEntryData();
-  }, [id]); 
+    fetchData(); 
+    fetchOligosData(); 
+    fetchPossibleTeammates();
+  }, [id, user]); 
 
-  // for uploading file 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  // for getting the (filtered) kin data. needs to be in a seperate useState because of the rawDataIds being part of the depenecy array. in the other useState, we are also fetching this data. 
+  useEffect(() => {
+    const fetchKineticData = async () => {
+      if (rawDataIds.length > 0) {
+        try {
+          const response = await fetch('/api/getKineticRawDataFromIDs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ids: rawDataIds }),
+          });
+          const data = await response.json();
+          setKineticData(data);
+        } catch (error) {
+          console.error('Error fetching kinetic raw data:', error);
+        }
+      }
+    };
+
+    fetchKineticData();
+  }, [id, user, rawDataIds]); 
+
+  const handlePlasmidFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     setPlasmidFile(file);
   };
@@ -81,8 +137,11 @@ const SingleVariant = () => {
     }
   };
 
-  const handleKineticAssayFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleKineticAssayFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
+ 
+    console.log(file)
+    // Creating the table 
     if (file) {
       Papa.parse(file, {
         complete: (result) => {
@@ -92,24 +151,95 @@ const SingleVariant = () => {
         header: false // for direct cell access 
       });
     }
+
+    // Creating the graph 
+    if (file && entryData.resid && entryData.resnum && entryData.resmut) {
+      try {
+        await generateGraph(file); 
+      } catch (error) {
+        console.error('Error generating graph:', error);
+      }
+    } else {
+      console.error('File or variant name missing');
+    }
   };
   const thirdColumnValues = kineticAssayData.slice(4, 12).map(row => row[2] || '0');
   const fourthColumnValues = kineticAssayData.slice(4, 12).map(row => row[3] || '0');
   const fifthColumnValues = kineticAssayData.slice(4, 12).map(row => row[4] || '0'); 
 
+  const generateGraph = async (file: File) => {
+    const formData:any = new FormData();
+    formData.append('file', file);
+    formData.append('variant-name', entryData.resid+entryData.resnum+entryData.resmut)
 
+    console.log("generating...")
 
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/plotit', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        responseType: 'blob',
+        
+      });
+      const imageBlob = new Blob([response.data], { type: 'image/png' });
+      const imageUrl = URL.createObjectURL(imageBlob);
+      console.log(imageUrl); 
+    
+      const graphImage = document.getElementById('graphImage') as HTMLImageElement;
+      if (graphImage) graphImage.src = imageUrl;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+
+  const handleWTDataSelection = (wtRawDataId: any) => {
+    setKineticWTId(wtRawDataId);
+  };
+
+  const foundOligo = oligosData.find(oligo => oligo.variant === entryData.resid+entryData.resnum+entryData.resmut);
   return (
     <div className="mt-8 text-center">
       <h1 className="text-2xl font-bold">Variant Information</h1>
       <div className="mt-5 mb-5">
-        <p>Primer Sequence: </p>
+        <p>{entryData.resid}{entryData.resnum}{entryData.resmut}</p>
+        {foundOligo && (
+          <p>Primer Sequence: {foundOligo.oligo}</p>
+        )}
         <p>Database ID: {entryData.id}</p>
         <p>Institution: {entryData.institution}</p>
         <p>Creator: {entryData.creator}</p>
+        <div>
+          <label>Teammate 1:</label>
+          <select value={teammate1} onChange={(e) => setTeammate1(e.target.value)}>
+            <option value="">None</option> 
+            {possibleTeammates.map((mate:any, index:any) => (
+              <option key={index} value={mate.user_name}>{mate.given_name} ({mate.user_name})</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Teammate 2:</label>
+          <select value={teammate2} onChange={(e) => setTeammate2(e.target.value)}>
+            <option value="">None</option> 
+            {possibleTeammates.map((mate:any, index:any) => (
+              <option key={index} value={mate.user_name}>{mate.given_name} ({mate.user_name})</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Teammate 3:</label>
+          <select value={teammate3} onChange={(e) => setTeammate3(e.target.value)}>
+            <option value="">None</option>
+            {possibleTeammates.map((mate:any, index:any) => (
+              <option key={index} value={mate.user_name}>{mate.given_name} ({mate.user_name})</option>
+            ))}
+          </select>
+        </div>
       </div>
-      <h1 className="text-2xl font-bold">Variant Checklist</h1>
 
+
+      <h1 className="text-2xl font-bold">Variant Checklist</h1>
       <div className="ml-8 text-center">
         <div>
           {/*In database: Rosetta_score column is changed, its value is: variant-WT */}
@@ -143,7 +273,7 @@ const SingleVariant = () => {
           <input
             type="file"
             id="fileUpload"
-            onChange={handleFileChange}
+            onChange={handlePlasmidFileChange}
           />
           {plasmidFile && <p>Selected file: {plasmidFile.name}</p>}
         </div>
@@ -158,9 +288,11 @@ const SingleVariant = () => {
           />
         </div>
         <div>
+          {/*In database: not sure yet*/}
           <label>Kinetic assay data uploaded?</label>
           <input type="file" accept=".csv" onChange={handleKineticAssayFileChange} />
           {kineticAssayData.length > 0 && (
+            <>
           <div>
             <table>
               <thead>
@@ -184,11 +316,31 @@ const SingleVariant = () => {
               </tbody>
             </table>
           </div>
+          <img id="graphImage" alt="Graph will be displayed here after uploading."/>
+          </>
           )}
         </div>
         <div>
+          {/*In database: not sure yet*/}
           <label>Wild-type kinetic assay data uploaded?</label>
-          <button className="ml-2">Select WT data</button>
+          <button onClick={() => setShowWTDataOptions(!showWTDataOptions)}>Select WT data</button>
+          <div>
+          {showWTDataOptions && kineticData.map((row, index) => (
+            <div key={index}>
+              <input
+                type="radio"
+                id={`wt-data-${index}`}
+                name="wt-data"
+                value={row.id}
+                onChange={() => setKineticWTId(row.id)}
+                checked={kineticWTId === row.id}
+              />
+              <label htmlFor={`wt-data-${index}`}>
+                WT data uploaded by {row.user_name}, assayed on {row.assay_date}
+              </label>
+            </div>
+          ))}
+          </div>
         </div>
         <div>
           <label>Thermostability assay data uploaded?</label>
@@ -210,8 +362,19 @@ const SingleVariant = () => {
         </div>
         <div>
           <label>Comments: </label>
-          <input type="text" placeholder="enter comments here" className="ml-2" />
+          <textarea placeholder="enter comments here" className="ml-2" />
         </div>
+        <div className="mt-4 mb-4">
+           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+             Submit for Curation
+           </button>
+           <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+             Save Progress
+           </button>
+           <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+             Delete Dataset
+           </button>
+         </div>
       </div>
     
     </div>

@@ -11,7 +11,7 @@ const PublicationsPage = () => {
           setPublications(data);
         };
     
-        fetchPublications().catch(console.error);
+        fetchPublications()
       }, []);
   
 

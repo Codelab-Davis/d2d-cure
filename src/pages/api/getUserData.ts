@@ -1,11 +1,9 @@
-import { PrismaClient } from '../../../prisma/generated/client_users';
-
-const prisma = new PrismaClient();
+import prismaUsers from "../../../prismaUsersClient";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'POST') {
     const { email } = req.body;
-    const user = await prisma.users.findFirst({
+    const user = await prismaUsers.users.findFirst({
       where: {
         email: email,
       },

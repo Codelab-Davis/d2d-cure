@@ -1,12 +1,10 @@
-import { PrismaClient } from '../../../prisma/generated/client_proteins';
-
-const prisma = new PrismaClient();
+import prismaProteins from "../../../prismaProteinsClient";
 
 export default async function handler(req:any, res:any) {
   const { username, institution, pi, resid, resnum, resmut } = req.body;
 
   try {
-    const newDataEntry = await prisma.characterizationData.create({
+    const newDataEntry = await prismaProteins.characterizationData.create({
       data: {
         resid,
         resnum: parseInt(resnum),

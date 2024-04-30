@@ -1,11 +1,9 @@
-import { PrismaClient } from '../../../prisma/generated/client_enzymes'; 
-
-const prisma = new PrismaClient();
+import prismaEnzymes from "../../../prismaEnzymesClient";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'GET') {
     try {
-      const enzymes = await prisma.generalInfo.findMany();
+      const enzymes = await prismaEnzymes.generalInfo.findMany();
       res.status(200).json(enzymes);
     } catch (error) {
       console.error('Request error', error);

@@ -1,12 +1,10 @@
-import { PrismaClient } from '../../../prisma/generated/client_proteins';
-
-const prisma = new PrismaClient();
+import prismaProteins from "../../../prismaProteinsClient";
 
 export default async function handler(req:any, res:any) {
   const { id } = req.query; 
 
   try {
-    const data = await prisma.characterizationData.findUnique({
+    const data = await prismaProteins.characterizationData.findUnique({
       where: {
         id: parseInt(id),
       },
