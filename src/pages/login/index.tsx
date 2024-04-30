@@ -46,14 +46,15 @@ const Login = () => {
   if (user) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <p>Hello, {user.status}</p>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             onClick={handleLogout}
           >
             Log Out
-          </button>
+          </button> <br></br>
+          <Link href = "user-management">Manage students in your class/laboratory</Link>
         </div>
       </div>
     );

@@ -136,7 +136,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin",
         "native": true
       }
     ],
@@ -162,8 +162,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\r\n  provider = \"prisma-client-js\"\r\n  output   = \"./generated/client_enzymes\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"mysql\"\r\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/enzymes\"\r\n}\r\n\r\nmodel GeneralInfo {\r\n  id              Int     @id @default(autoincrement()) @db.UnsignedTinyInt\r\n  abbr            String  @db.VarChar(4)\r\n  full_name       String  @db.TinyText\r\n  year            Int     @db.Year\r\n  species         String  @db.TinyText\r\n  EC_number       String  @db.VarChar(14)\r\n  UniProt_number  String  @db.VarChar(10)\r\n  PDB_entries     String? @db.TinyText\r\n  molar_mass      Int     @db.UnsignedMediumInt\r\n  ext_coefficient Int     @db.UnsignedMediumInt\r\n  pathway_desc    String  @db.Text\r\n  assay_desc      String  @db.Text\r\n}\r\n",
-  "inlineSchemaHash": "44b9ea030bc36c0199aed57f7f801dfd7bbc5b58a00d84701fff6e2b45b3a21f",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/client_enzymes\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = \"mysql://admin:hellothere@d2ddb.ckxjdd4ew6cp.us-east-2.rds.amazonaws.com:3306/enzymes\"\n}\n\nmodel GeneralInfo {\n  id              Int     @id @default(autoincrement()) @db.UnsignedTinyInt\n  abbr            String  @db.VarChar(4)\n  full_name       String  @db.TinyText\n  year            Int     @db.Year\n  species         String  @db.TinyText\n  EC_number       String  @db.VarChar(14)\n  UniProt_number  String  @db.VarChar(10)\n  PDB_entries     String? @db.TinyText\n  molar_mass      Int     @db.UnsignedMediumInt\n  ext_coefficient Int     @db.UnsignedMediumInt\n  pathway_desc    String  @db.Text\n  assay_desc      String  @db.Text\n}\n",
+  "inlineSchemaHash": "6e478065b4889e11d061a0d7eec245a852ff7cc284807d54415adbdc3891f2ee",
   "copyEngine": true
 }
 config.dirname = '/'
