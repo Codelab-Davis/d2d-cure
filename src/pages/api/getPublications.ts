@@ -1,3 +1,4 @@
+// for some reason the prisma fix isnt working with this API, figure out later 
 import { PrismaClient } from '../../../prisma/generated/client_publications';
 
 const prisma = new PrismaClient();
