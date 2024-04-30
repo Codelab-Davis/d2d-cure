@@ -2,12 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence, signOut  } from "firebase/auth";
 import { auth } from "../../../firebaseConfig"
 import { useRouter } from 'next/router';
-import nookies from "nookies"; 
-import firebaseAdmin from "../../../firebaseAdmin"; 
 import { useUser } from '@/components/UserProvider';
 import Link from 'next/link';
+
 const Login = () => {
-  
+
   const { user, setUser, loading } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +35,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
     await handleSignIn(email, password);
   };
 
@@ -101,6 +100,7 @@ const Login = () => {
           </div>
           {error && <p className="text-red-500 text-xs italic">{error}</p>}
         </form>
+        <Link href="/signup" className="text-blue-600 underline hover:text-blue-800">Click here to sign up for an account</Link>
       </div>
     </div>
   );

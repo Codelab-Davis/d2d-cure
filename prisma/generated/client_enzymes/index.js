@@ -128,7 +128,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/ryanuyeki/Downloads/codelab/d2d/d2d-cure/prisma/generated/client_enzymes",
+      "value": "C:\\Users\\visha\\CodeLab\\D2D WSQ24\\d2d-cure\\prisma\\generated\\client_enzymes",
       "fromEnvVar": null
     },
     "config": {
