@@ -1,4 +1,6 @@
-from flask import Flask, request, send_file
+
+from flask import Flask, request, send_file, jsonify
+
 import matplotlib
 from flask_cors import CORS
 matplotlib.use('Agg')
@@ -6,13 +8,29 @@ import matplotlib.pyplot as plt
 import io
 import re 
 from math import ceil, sqrt
-from numpy import diag, sqrt, linspace, inf
+from numpy import diag, sqrt, linspace, inf, exp
 from scipy.optimize import curve_fit 
-from matplotlib.pyplot import figure, plot, ylabel, xlabel, title, savefig, gca, legend
+from matplotlib.pyplot import figure, plot, ylabel, xlabel, title, savefig, gca, legend, ylim
 import pandas as pd
+from werkzeug.utils import secure_filename
+import os
+import base64
+from io import BytesIO
+from sys import argv
+from statistics import mean
 app = Flask(__name__)
 CORS(app)
 
+# Directory where uploaded files will be saved
+GEL_UPLOAD_FOLDER = 'gel_uploads'
+app.config['GEL_UPLOAD_FOLDER'] = GEL_UPLOAD_FOLDER
+
+CSV_UPLOAD_FOLDER = 'csv_uploads'
+app.config['CSV_UPLOAD_FOLDER'] = CSV_UPLOAD_FOLDER
+
+# Ensure the upload folder exists
+os.makedirs(GEL_UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(CSV_UPLOAD_FOLDER, exist_ok=True)
 
 
 # Turn debug mode on or off
@@ -56,10 +74,12 @@ def plotit():
     absorbance_data = df.iloc[7:15, 2:5].values.flatten() 
     string_of_data = ",".join([f"{float(x):.5E}" if pd.notnull(x) else '' for x in df.iloc[4:12, 2:5].values.flatten()])
 
+
     cleaned_value = re.sub(r'[^\x00-\x7F]+', '', df.iloc[2, 6]).strip()
     yield_ = cleaned_value
     print("yield is " + yield_)
     dil_factor = df.iloc[2, 7]  
+
     instrument_units = df.iloc[1, 4]  
     yield_units = df.iloc[1, 6] 
 
@@ -67,8 +87,10 @@ def plotit():
 
 
     slope_u = instrument_units
+
     yld = float(yield_)
     yld_u = yield_units  # This needs to be surrounded with quotes at the command line, if it includes parentheses.
+
     dil = float(dil_factor)  # "Traditionally", either 10 or 100
 
     # Constant values
@@ -279,8 +301,10 @@ def plotit():
         ylabel(r'$\mathit{k}_{\mathrm{obs}}$ (min$^{-1}$)', fontsize='16')
         xlabel('[S] (mᴍ)', fontsize='16')
         legend(fontsize='12', loc='lower right')
+
         savefig('placeholder name' + '.png', bbox_inches='tight')
         return send_file('placeholder name' + '.png', mimetype='image/png')
+
 
     else:
         figure(figsize=(5, 5))
@@ -294,8 +318,10 @@ def plotit():
         ylabel(r'$\mathit{k}_{\mathrm{obs}}$ (min$^{-1}$)', fontsize='16')
         xlabel('[S] (mᴍ)', fontsize='16')
         legend(fontsize='12')
+
         savefig('placeholder name' + '.png', bbox_inches='tight')
         return send_file('placeholder name' + '.png', mimetype='image/png')
+
 
     # Now, we'll plot Lineweaver-Burk for comparison.
     inv_vmax = 1/vmax
@@ -379,11 +405,13 @@ def plotit():
     else:
         plot(inv_s, inv_rates, 'bo')
 
+
     title('placeholder name2', fontsize='20')
     ylabel(r'$1/\mathit{v}$ (min/mM)', fontsize='16')
     xlabel('1/[S] (1/mᴍ)', fontsize='16')
     legend(fontsize='10', loc='upper center')
     savefig('placeholder name' + '-LB.png', bbox_inches='tight')
+
 
     # Output the kinetic constants in a list to be input back into the webpage.
     if KM <= 75:
@@ -398,5 +426,37 @@ def plotit():
                     str(KM_SD) + "," + str(kcat_over_KM) + "," + str(kcat_over_KM_SD))
             log_file.write("\nSTOP LOG\n")
 
+
+    return jsonify(response_data)
+
+
+            
+
+@app.route('/uploadGEL', methods=['POST'])
+def upload_GEL():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file:
+        filename = secure_filename(file.filename)
+        save_path = os.path.join(app.config['GEL_UPLOAD_FOLDER'], filename)
+        file.save(save_path)
+        return jsonify({'message': 'File uploaded successfully', 'filename': filename}), 200
+    
+@app.route('/uploadCSV', methods=['POST'])
+def upload_CSV():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file:
+        filename = secure_filename(file.filename)
+        save_path = os.path.join(app.config['CSV_UPLOAD_FOLDER'], filename)
+        file.save(save_path)
+        return jsonify({'message': 'File uploaded successfully', 'filename': filename}), 200
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)

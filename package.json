@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
+
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
     "firebase": "^10.11.1",
     "firebase-admin": "^12.1.0",
     "formidable": "^3.5.1",
     "net": "^1.0.2",
+
     "next": "14.1.0",
     "nookies": "^2.5.2",
     "papaparse": "^5.4.1",
