@@ -34,7 +34,7 @@ const NavBar = () => {
       <div className="relative group">
         <button className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Resources</button>
         <div className="absolute py-2 w-48 bg-white rounded-md shadow-xl z-20 hidden group-hover:block">
-          <Link href="#">
+          <Link href="/resources/structured_files">
             <span className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Structured Files</span>
           </Link>
           <Link href="/resources/oligosearch">
