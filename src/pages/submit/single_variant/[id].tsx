@@ -21,7 +21,7 @@ const SingleVariant = () => {
   const [teammate1, setTeammate1] = useState<any>([]);
   const [teammate2, setTeammate2] = useState<any>([]);
   const [teammate3, setTeammate3] = useState<any>([]);
-  const [WT, setWT] = useState<any>('');
+  const [WT, setWT] = useState<any>('');const [kineticRawData, setKineticRawData] = useState<any[]>([]);
   const [variant, setVariant] = useState<any>('');
   const [oligoOrdered, setOligoOrdered] = useState<any>(0);
   const [plasmidFile, setPlasmidFile] = useState<File | null>(null);
