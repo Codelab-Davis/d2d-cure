@@ -21,7 +21,7 @@ const SingleVariant = () => {
   const [teammate1, setTeammate1] = useState<any>([]);
   const [teammate2, setTeammate2] = useState<any>([]);
   const [teammate3, setTeammate3] = useState<any>([]);
-  const [WT, setWT] = useState<any>('');const [kineticRawData, setKineticRawData] = useState<any[]>([]);
+  const [WT, setWT] = useState<any>('');
   const [variant, setVariant] = useState<any>('');
   const [oligoOrdered, setOligoOrdered] = useState<any>(0);
   const [plasmidFile, setPlasmidFile] = useState<File | null>(null);
@@ -34,8 +34,6 @@ const SingleVariant = () => {
   const [rawDataIds, setRawDataIds] = useState<number[]>([]);
   const [kineticWTId, setKineticWTId] = useState<any>(0);
   const [kineticData, setKineticData] = useState<any[]>([]); // the filtered data from KineticRawData table, for the WT selection 
-
-
 
   useEffect(() => {
     const fetchEntryData = async () => {
@@ -51,6 +49,7 @@ const SingleVariant = () => {
         console.error('Error fetching entry data:', error);
       }
     };
+    //WT kinetic Assay Data
     const fetchData = async () => {
       const response = await fetch('/api/getCharacterizationData');
       const data = await response.json();
@@ -81,7 +80,7 @@ const SingleVariant = () => {
 
   // for getting the (filtered) kin data. needs to be in a seperate useState because of the rawDataIds being part of the depenecy array. in the other useState, we are also fetching this data. 
   useEffect(() => {
-    const fetchKineticData = async () => {
+    const fetchKineticData = async () => {    
       if (rawDataIds.length > 0) {
         try {
           const response = await fetch('/api/getKineticRawDataFromIDs', {

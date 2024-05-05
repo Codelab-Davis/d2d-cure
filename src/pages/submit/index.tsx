@@ -93,7 +93,6 @@ const SubmitPage = () => {
   }
 
   const handleCreateNewDataset = async () => {
-  
     try {
       //prepares to send a POST request to the specified API endpoint. fetch used to send the request
       const response = await fetch('/api/createNewCharacterizationDataEntry', {
@@ -131,20 +130,24 @@ const SubmitPage = () => {
   };
 
   const handleSelectDataset = (id:any) => {
-    if (selection === 'single_variant'){
+    if (selection == 'single_variant'){
       router.push(`/submit/single_variant/${id}`);
     }
-    else {
+    else if (selection === 'wild_type') {
       router.push(`/submit/wild_type/${id}`);
     }
   };
 
-
-
   // for new dataset navigation to work 
   useEffect(() => {
     if (newEntry && newEntry.id) {
-      router.push(`/submit/single_variant/${newEntry.id}`); //navigates to a url specific to the newly created dataset
+      if (selection == 'single_variant'){
+        router.push(`/submit/single_variant/${newEntry.id}`);
+      }
+      else if (selection === 'wild_type') {
+        router.push(`/submit/wild_type/${newEntry.id}`);
+      }
+      //router.push(`/submit/single_variant/${newEntry.id}`); navigates to a url specific to the newly created dataset
     }
   }, [newEntry, router]);
 
@@ -241,6 +244,7 @@ const SubmitPage = () => {
 
         {/* Wild Type form */}
         {selection === 'wild_type' && (
+          console.log('Current selection: ', selection),
           <div>
             <h2>Wild Type Form</h2>
             <div className="space-x-4">
