@@ -12,6 +12,7 @@ function userManagement() {
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [checkedUsers, setCheckedUsers] = useState<{ [key: number]: boolean }>({});
   const { user, loading } = useUser();
+  const [sortConfig, setSortConfig] = useState<{ key: string, direction: string }>({ key: '', direction: '' });
 
   useEffect(() => {
     const fetchInstitutions = async () => {
@@ -61,6 +62,26 @@ const filteredUsers: any[] = [];
     }
   }
   console.log("Filtered Users", filteredUsers);
+
+    // Sorting function
+    const sortTable = (key: string) => {
+      let direction = 'ascending';
+      if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+  
+    // Sorting logic
+    const sortedUsers = [...filteredUsers].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'ascending' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    });
 
 
   const handleCheckboxChange = (userId: number) => {
@@ -193,22 +214,67 @@ const handleDeleteFirebase = async () => {
           </button>
         </div>
         <table>
-          <thead>
-            <tr>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Check</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>User Name</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Given Name</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Title</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Institution</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Status/Role</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>PI</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Email</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>RegDate</th>
-              <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Approved</th>
-            </tr>
-          </thead>
+        <thead>
+              <tr>
+                <th style={{ color: '#40E0D0', textDecoration: 'underline' }}>Check</th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('user_name')}
+                >
+                  User Name
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('given_name')}
+                >
+                  Given Name
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('title')}
+                >
+                  Title
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('institution')}
+                >
+                  Institution
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('status')}
+                >
+                  Status/Role
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('pi')}
+                >
+                  PI
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('email')}
+                >
+                  Email
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('reg_date')}
+                >
+                  RegDate
+                </th>
+                <th
+                  style={{ color: '#40E0D0', textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() => sortTable('approved')}
+                >
+                  Approved
+                </th>
+              </tr>
+            </thead>
           <tbody>
-            {filteredUsers.map((user) => (
+            {sortedUsers.map((user) => (
               <tr key={user.id}>
                 <td style={{ marginLeft: '10px' }}>
                   <input
