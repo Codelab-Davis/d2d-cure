@@ -13,6 +13,7 @@ const WildType = () => {
     const [kineticRawData, setKineticRawData] = useState<any[]>([]);
     const [entryData, setEntryData] = useState<any>([]);
   
+    const [yieldValue, setYieldValue] = useState<any>([]);
     const [oligosData, setOligosData] = useState<any[]>([]);
     const [oligosDisplay, setOligosDisplay] = useState("");
     const [possibleTeammates, setPossibleTeammates] = useState<any>([]);
@@ -160,16 +161,30 @@ const WildType = () => {
         <h1 className="text-2xl font-bold">Checklist</h1>
         <br></br>
         <div>
-          {/*In database: expressed column is changed */}
+          {/* In database: expressed column is changed */}
           <label>Protein expressed?</label>
           <input 
             type="checkbox" 
             className="ml-2" 
-            checked={expressed === 1} 
+            checked={expressed === 1 || entryData.yield_avg !== null}
             onChange={(e) => setExpressed(e.target.checked ? 1 : 0)}
           />
         </div>
-        <br></br>   
+        {entryData.yield_avg !== null ? (
+          <div>
+            <label>Yield Average: </label>
+            <span>{entryData.yield_avg} mg/mL</span>
+          </div>
+        ) : (
+          <div>
+            <label>No yield value:</label>
+            <input 
+              type="text" 
+              value={yieldValue} 
+              onChange={(e) => setYieldValue(parseFloat(e.target.value))}
+            />
+          </div>
+        )}
         <div>
             <label>Kinetic assay data uploaded? </label>
             <input type="file" accept=".csv" onChange={handleKineticAssayFileChange} />
@@ -210,8 +225,23 @@ const WildType = () => {
         <br></br>
         <div>
           <label>Melting point values uploaded?</label>
-          <input type="text" placeholder="Tm mean(°C)" className="ml-2" />
-          <input type="text" placeholder="Tm standard deviation(°C)" className="ml-2" />
+          {entryData.Tm ? (
+              <>
+                  <input
+                    type="text"
+                    value={entryData.Tm ? `${entryData.Tm} ± ${entryData.Tm_SD}` : "Not entered yet"}
+                    placeholder="Tm mean(°C)"
+                    className="ml-2"
+                    readOnly
+                  />
+                  <button>Edit</button>
+              </>
+          ) : (
+              <>
+                  <p>Not entered yet</p>
+                  <button>Add melting point values</button>
+              </>
+          )}
         </div>
         <br></br>
         <div>
