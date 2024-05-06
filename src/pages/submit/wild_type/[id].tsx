@@ -34,6 +34,7 @@ const WildType = () => {
     const [kineticData, setKineticData] = useState<any[]>([]); // the filtered data from KineticRawData table, for the WT selection 
 
     useEffect(() => {
+        //gets the row of data for the associated ID of variant
         const fetchEntryData = async () => {
             if (!id) return;
             try{
@@ -42,6 +43,7 @@ const WildType = () => {
                     throw new Error('Failed to fetch entry data');
                 }
                 const data = await response.json();
+                console.log(data);
                 setEntryData(data);
             }   catch(error) {
                 console.error('Error fetching entry data: ', error)
@@ -98,6 +100,7 @@ const WildType = () => {
         console.log("generating...")
     
         try {
+          //send form data to this endpoint, blob - expected response is a binary file
           const response = await axios.post('http://127.0.0.1:5000/plotit', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -107,7 +110,7 @@ const WildType = () => {
           });
           const imageBlob = new Blob([response.data], { type: 'image/png' });
           const imageUrl = URL.createObjectURL(imageBlob);
-          console.log(imageUrl); 
+          console.log(imageUrl); //blob converted to a URL
         
           const graphImage = document.getElementById('graphImage') as HTMLImageElement;
           if (graphImage) graphImage.src = imageUrl;
