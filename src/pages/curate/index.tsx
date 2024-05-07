@@ -11,7 +11,7 @@ const CuratePage = () => {
     const [data, setData] = useState<any[]>([]);
     const [sortColumn, setSortColumn] = useState<string>('ID');
     const [sortDirection, setSortDirection] = useState<string>('asc');
-    const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+    const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,7 +25,7 @@ const CuratePage = () => {
             const initialCheckedItems = data.reduce((state:any, item:any) => ({
                 ...state,
                 [item.id]: false  // Initialize all checkboxes as unchecked
-            }), {} as Record<string, boolean>);
+            }), {} as Record<number, boolean>);
             setCheckedItems(initialCheckedItems);
         };
         fetchData();
@@ -91,7 +91,7 @@ const CuratePage = () => {
         return `${resid}${resnum}${resmut}`;
     };
 
-    const handleCheckboxChange = (id: string) => {
+    const handleCheckboxChange = (id: number) => {
         setCheckedItems(prevState => ({
             ...prevState,
             [id]: !prevState[id]
@@ -109,7 +109,7 @@ const CuratePage = () => {
     const getSelectedIds = () => {
         return Object.entries(checkedItems)
                 .filter(([key, value]) => value === true)
-                .map(([key, value]) => key);
+                .map(([key, value]) => parseInt(key, 10));
     }
 
     const approveData = () => {
@@ -119,11 +119,15 @@ const CuratePage = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(selectedIds),
+            body: JSON.stringify({ ids: selectedIds }),
         }).then((response) => {
+            if (!response.ok) {  // Checks if response status code is not in the 200-299 range
+                throw new Error('Failed to approve data, server responded with ' + response.status);
+            }
+            setData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
             console.log("Successfully approved data.");
         }).catch((error) => {
-            console.log("Failed to approve data.");
+            console.log(error);
         })
     }
 
@@ -134,11 +138,15 @@ const CuratePage = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(selectedIds),
+            body: JSON.stringify({ ids: selectedIds }),
         }).then((response) => {
+            if (!response.ok) {  // Checks if response status code is not in the 200-299 range
+                throw new Error('Failed to reject data, server responded with ' + response.status);
+            }
+            setData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
             console.log("Successfully rejected data.");
         }).catch((error) => {
-            console.log("Failed to reject data.");
+            console.log(error);
         })
     }
 

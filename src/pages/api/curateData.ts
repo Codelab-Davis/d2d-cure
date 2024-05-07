@@ -6,21 +6,24 @@ export default async function handler(req: any, res: any) {
   const { ids } = req.body; // ids should be an array of integers
 
   if (!ids || !Array.isArray(ids)) {
+    console.log(ids)
+    console.log("Failed, ids aren't valid");
     return res.status(400).json({ error: 'Invalid input: provide an array of IDs.' });
   }
 
   try {
+    const integerIds = ids.map(id => parseInt(id, 10))
     if (req.method === 'DELETE') {
       await prisma.characterizationData.deleteMany({
         where: {
-          id: { in: ids }
+          id: { in: integerIds }
         }
       });
       res.status(200).json({ message: 'Records deleted successfully' });
     } else if (req.method === 'PUT') {
       await prisma.characterizationData.updateMany({
         where: {
-          id: { in: ids }
+          id: { in: integerIds }
         },
         data: {
           approved_by_pi: true,
