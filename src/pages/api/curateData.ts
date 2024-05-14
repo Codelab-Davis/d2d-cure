@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client_proteins';
-
-const prisma = new PrismaClient();
+import prismaProteins from "../../../prismaProteinsClient";
 
 export default async function handler(req: any, res: any) {
   const { ids } = req.body; // ids should be an array of integers
@@ -14,14 +12,14 @@ export default async function handler(req: any, res: any) {
   try {
     const integerIds = ids.map(id => parseInt(id, 10))
     if (req.method === 'DELETE') {
-      await prisma.characterizationData.deleteMany({
+      await prismaProteins.characterizationData.deleteMany({
         where: {
           id: { in: integerIds }
         }
       });
       res.status(200).json({ message: 'Records deleted successfully' });
     } else if (req.method === 'PUT') {
-      await prisma.characterizationData.updateMany({
+      await prismaProteins.characterizationData.updateMany({
         where: {
           id: { in: integerIds }
         },
