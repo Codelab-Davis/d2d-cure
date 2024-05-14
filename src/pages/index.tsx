@@ -3,7 +3,7 @@ import "../app/globals.css";
 import NavBar from '@/components/NavBar';
 import { useUser } from '@/components/UserProvider';
 import {Input} from "@nextui-org/input";
-
+import {Button} from "@nextui-org/react";
 
 export default function Home() {
   const { user } = useUser();
@@ -11,7 +11,6 @@ export default function Home() {
   return (
     <div>
     <NavBar />
-
       <div className="mt-8 text-center">
         <h1 className="text-2xl font-bold">Welcome to the Home Page</h1>
         {/* Conditionally render message */}
