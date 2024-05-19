@@ -31,7 +31,6 @@ const SingleVariant = () => {
   const [expressed, setExpressed] = useState<any>(0);
   const [kineticAssayData, setKineticAssayData] = useState<Array<any>>([]); // the parsed CSV for table display 
   const [variantName, setVariantName] = useState<String>();
-  const [showKineticWTDataOptions, setShowKineticWTDataOptions] = useState(false);
   const [kineticRawDataIds, setKineticRawDataIds] = useState<number[]>([]);
   const [kineticWTId, setKineticWTId] = useState<any>(0);
   const [kineticData, setKineticData] = useState<any[]>([]); // the filtered data from KineticRawData table, for the WT selection 
@@ -332,6 +331,25 @@ const SingleVariant = () => {
     }
   };
 
+  const updateWTRawDataId = async (WT_raw_data_id:any) => {
+    const response = await fetch('/api/updateCharacterizationDataWTRawDataId', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: entryData.id,
+        WT_raw_data_id: WT_raw_data_id
+      }),
+    });
+    setCurrentView('checklist');
+  
+    if (!response.ok) {
+      console.error('Failed to update data');
+    }
+  };
+  
+
 
 
   // DATABASE UPDATE FUNCTIONS // 
@@ -387,6 +405,18 @@ const SingleVariant = () => {
           }
         case "Protein induced and expressed":
           if (entryData.expressed === null) {
+            return {
+              text: "Incomplete",
+              className: "text-yellow-700 bg-yellow-100 rounded-full px-4 py-1"
+            };
+          } else {
+            return {
+              text: "Complete",
+              className: "text-green-700 bg-green-100 rounded-full px-4 py-1"
+            };
+          }
+        case "Wild type kinetic data uploaded":
+          if (entryData.WT_raw_data_id === 0) {
             return {
               text: "Incomplete",
               className: "text-yellow-700 bg-yellow-100 rounded-full px-4 py-1"
@@ -611,28 +641,57 @@ const SingleVariant = () => {
         );
       case "Wild type kinetic data uploaded":
         return (
-          <div>
-            <h2>Wild type kinetic data uploaded?</h2>
-            <button onClick={() => setShowKineticWTDataOptions(!showKineticWTDataOptions)}>Select WT data</button>
+          <div className="space-y-4">
+            <button 
+              className="text-blue-500 hover:text-blue-700"
+              onClick={() => setCurrentView('checklist')}
+            >
+              &lt; Back to Checklist
+            </button>
+            <h2 className="text-2xl font-bold text-left">Wild Type Kinetic Data Uploaded?</h2>
             <div>
-              {showKineticWTDataOptions && kineticData.map((row, index) => (
-                <div key={index}>
-                  <input
-                    type="radio"
-                    id={`wt-data-${index}`}
-                    name="wt-data"
-                    value={row.id}
-                    onChange={() => setKineticWTId(row.id)}
-                    checked={kineticWTId === row.id}
-                  />
-                  <label htmlFor={`wt-data-${index}`}>
-                    WT data uploaded by {row.user_name}, assayed on {row.assay_date}
-                  </label>
-                </div>
-              ))}
+                <table className="min-w-full divide-y divide-gray-200 mt-4">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Enzyme
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date Assayed
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Uploaded By
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {kineticData.map((row, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          BglB
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {row.assay_date}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {row.user_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button 
+                          onClick={() => updateWTRawDataId(row.id)}
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Select
+                        </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
             </div>
-            <button className="mr-4">Save</button>
-            <button onClick={() => setCurrentView('checklist')}>Back to Checklist</button>
           </div>
         );
       case "Thermostability assay data uploaded":
