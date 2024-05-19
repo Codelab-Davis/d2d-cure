@@ -1,3 +1,5 @@
+// This page needs to be redone so that the upload goes to AWS S3. See submit/single-variant/[id].tsx
+
 import React, { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useUser } from '@/components/UserProvider';
@@ -25,7 +27,7 @@ function GelImage() {
     setGelID(event.target.value);
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event:any) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
