@@ -5,9 +5,9 @@ import NavBar from '@/components/NavBar';
 import firebaseAdmin from "../../../firebaseAdmin"; 
 import { getAuth, deleteUser } from "firebase/auth";
 import { auth } from "firebase-admin";
-import { TopologyDescription } from 'mongodb';
+// import { TopologyDescription } from 'mongodb';
 
-function userManagement() {
+function UserManagement() {
   const [institutions, setInstitutionsList] = useState<any[]>([]);
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [checkedUsers, setCheckedUsers] = useState<{ [key: number]: boolean }>({});
@@ -301,4 +301,4 @@ const handleDeleteFirebase = async () => {
   );
 }
 
-export default userManagement;
+export default UserManagement;
