@@ -106,7 +106,7 @@ const OligoSearchPage = () => {
         <Card style = {{marginTop: '30px', width: '800px'}}>
           <CardBody style = {{marginLeft: '10px', marginTop: '10px'}}>
             <label style={{ fontWeight: '100px' , fontSize: '25px', padding: '10px'}}> Results </label>
-            {oligosDisplay && <div className="mt-4 font-bold" style ={{padding: '10px', color: 'grey'}}>{oligosDisplay}</div>}
+            {oligosDisplay && <div className="mt-4" style ={{padding: '10px', color: 'grey'}}>{oligosDisplay}</div>}
           </CardBody>
       </Card>
 
