@@ -62,7 +62,7 @@ const OligoSearchPage = () => {
         <div className="flex flex-col gap-4">
           <div className="flex gap-2">
             <div style={{marginBottom: '10px', marginRight: '50px'}}>
-              <label htmlFor="enzyme" className="font-bold" style={{ fontWeight: 'bold', display: 'block'}}>Enzyme</label>
+              <label htmlFor="enzyme" className="font-bold" style={{ fontWeight: 'bold', display: 'block', marginBottom: '10px'}}>Enzyme</label>
               {sizes.map((size) => (
                 size === "sm" && (
                   <Select
@@ -79,25 +79,31 @@ const OligoSearchPage = () => {
                   </Select>
                 )))}
           </div>
-          <div style={{marginBottom: '10px'}}>
-            <label htmlFor="enzymeVariant" className="font-bold" style={{ fontWeight: 'bold', marginBottom: '10px'}}>Enzyme Variant</label>
-            {sizes.map((size) => (
-              size === "lg" && (
-                <Input
-                  key={size}
-                  type="text"
-                  id="enzymeVariant"
-                  value={enzymeVariant}
-                  onChange={(e) => setEnzymeVariant(e.target.value)}
-                  placeholder="Search"
-                  size={size}
-                  style={{width: '200px', borderRadius: '10px'}}
-                />
+          <div>
+            <label htmlFor="enzymeVariant" className="font-bold" style={{ fontWeight: 'bold'}}>Enzyme Variant</label>
+            {variants.map((variant) => (
+            sizes.map((size) => (
+              variant === "bordered" && size === "lg" && (
+                <div style = {{marginTop: '10px'}}>
+                  <Input
+                    key={`${size}-${variant}`} 
+                    type="text"
+                    id="enzymeVariant"
+                    value={enzymeVariant}
+                    onChange={(e) => setEnzymeVariant(e.target.value)}
+                    placeholder="Search"
+                    size={size}
+                    variant={variant}
+                    style={{ width: '200px', borderRadius: '10px' }}
+                  />
+                </div>
               )
-            ))}
+            ))
+          ))}
+
           </div>
 
-            <Button onClick={handleSubmit} style = {{marginTop: '25px', height: '45px', backgroundColor: "#06B7DB", color: "white"}}>
+            <Button onClick={handleSubmit} style = {{marginTop: '35px', height: '45px', backgroundColor: "#06B7DB", color: "white"}}>
                         Search
             </Button>
 
