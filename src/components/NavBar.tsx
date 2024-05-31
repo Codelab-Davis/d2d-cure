@@ -40,8 +40,11 @@ const NavBar = () => {
           <Link href="/resources/oligosearch">
             <span className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Oligo Search</span>
           </Link>
-          <Link href="/resources/publications">
+          <Link href="/resources/publication">
             <span className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Publications</span>
+          </Link>
+          <Link href="/resources/test">
+            <span className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">Test</span>
           </Link>
         </div>
       </div>
