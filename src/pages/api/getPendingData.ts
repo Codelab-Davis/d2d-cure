@@ -1,10 +1,8 @@
-import { PrismaClient } from '../../../prisma/generated/client_proteins';
-
-const prisma = new PrismaClient();
+import prismaProteins from "../../../prismaProteinsClient";
 
 export default async function handler(req: any, res: any) {
   try {
-    const characterizationData = await prisma.characterizationData.findMany({
+    const characterizationData = await prismaProteins.characterizationData.findMany({
       where: {
         submitted_for_curation: true,
         curated: false
@@ -12,8 +10,8 @@ export default async function handler(req: any, res: any) {
     });
 
     // Fetch KineticRawData for each raw_data_id directly
-    const combinedData = await Promise.all(characterizationData.map(async (data) => {
-      const kineticRawData = await prisma.kineticRawData.findUnique({
+    const combinedData = await Promise.all(characterizationData.map(async (data:any) => {
+      const kineticRawData = await prismaProteins.kineticRawData.findUnique({
         where: { id: data.raw_data_id },
         select: {
           purification_date: true,
@@ -22,7 +20,7 @@ export default async function handler(req: any, res: any) {
         }
       });
 
-      const tempRawData = await prisma.tempRawData.findUnique({
+      const tempRawData = await prismaProteins.tempRawData.findUnique({
         where: { id: data.temp_raw_data_id },
         select: {
           user_name: true,
