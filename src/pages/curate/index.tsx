@@ -3,6 +3,7 @@ import "../../app/globals.css";
 import { useUser } from '@/components/UserProvider';
 import { AuthChecker } from '@/components/AuthChecker';
 import NavBar from '@/components/NavBar';
+import Link from 'next/link';
 
 
 const CuratePage = () => {
@@ -247,14 +248,14 @@ const CuratePage = () => {
                         <p>{viewableData.length} records of data remain to be curated. Please approve or reject the data below.</p>
                         <div className="flex flex-row items-center my-2">
                             <button
-                                className='bg-green-500 mx-2 p-2 rounded'
+                                className={`${!Object.values(checkedItems).some(value => value === true) ? "bg-gray-500" : "bg-green-500"} mx-2 p-2 rounded`}
                                 onClick={approveData}
                                 disabled={!Object.values(checkedItems).some(value => value === true)}
                             >
                                 Approve
                             </button>
                             <button
-                                className='bg-red-500 mx-2 p-2 rounded'
+                                className={`${!Object.values(checkedItems).some(value => value === true) ? "bg-gray-500" : "bg-red-500"} mx-2 p-2 rounded`}
                                 onClick={rejectData}
                                 disabled={!Object.values(checkedItems).some(value => value === true)}
                             >
@@ -308,7 +309,12 @@ const CuratePage = () => {
                                                 {data.T50 !== null && !isNaN(data.T50) ? `${roundTo(data.T50, 1)} ± ${data.T50_SD !== null && !isNaN(data.T50_SD) ? roundTo(data.T50_SD, 1) : '—'}` : '—'}
                                             </td>
                                             <td className="border border-gray-300">
-                                                View Dataset
+                                                <Link
+                                                    className="underline text-blue-500 cursor-pointer"
+                                                    href={`/submit/single_variant/${encodeURIComponent(data.id)}`}
+                                                >
+                                                    View Dataset
+                                                </Link>
                                             </td>
                                         </tr>
                                         {data.kineticRawData && (
