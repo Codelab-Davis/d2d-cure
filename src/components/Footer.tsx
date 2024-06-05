@@ -4,7 +4,7 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, DropdownItem, D
 
 export default function App() {
   return (
-<footer className="bg-white dark:bg-gray-900" style={{ maxWidth: 'full' }}>
+<footer className="bg-white dark:bg-gray-900 border-t-1" style={{ maxWidth: 'full' }}>
     <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
