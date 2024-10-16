@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate --schema=./prisma/schema_users.prisma && prisma generate --schema=./prisma/schema_proteins.prisma && prisma generate --schema=./prisma/schema_publications.prisma && prisma generate --schema=./prisma/schema_enzymes.prisma && next build",
     "start": "next start",
     "lint": "next lint"
   },
