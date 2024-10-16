@@ -5,7 +5,6 @@ import NavBar from '@/components/NavBar';
 import firebaseAdmin from "../../../firebaseAdmin"; 
 import { getAuth, deleteUser } from "firebase/auth";
 import { auth } from "firebase-admin";
-// import { TopologyDescription } from 'mongodb';
 
 function UserManagement() {
   const [institutions, setInstitutionsList] = useState<any[]>([]);

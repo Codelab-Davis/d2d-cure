@@ -1,8 +1,9 @@
 import prismaProteins from "../../../prismaProteinsClient";
 
 export default async function handler(req: any, res: any) {
-  const { ids } = req.body; // ids should be an array of integers
+  const { ids, status } = req.body;
 
+  // ids should be an array of integers
   if (!ids || !Array.isArray(ids)) {
     console.log(ids)
     console.log("Failed, ids aren't valid");
@@ -19,14 +20,21 @@ export default async function handler(req: any, res: any) {
       });
       res.status(200).json({ message: 'Records deleted successfully' });
     } else if (req.method === 'PUT') {
+      let data;
+      if (status === "ADMIN") {
+        data = {
+          curated: true
+        }
+      } else {    // status === "Professor"
+        data = {
+          approved_by_pi: true
+        }
+      }
       await prismaProteins.characterizationData.updateMany({
         where: {
           id: { in: integerIds }
         },
-        data: {
-          approved_by_pi: true,
-          curated: true
-        }
+        data: data
       });
       res.status(200).json({ message: 'Records updated successfully' });
     } else {

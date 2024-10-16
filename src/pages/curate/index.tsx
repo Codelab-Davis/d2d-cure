@@ -3,33 +3,55 @@ import "../../app/globals.css";
 import { useUser } from '@/components/UserProvider';
 import { AuthChecker } from '@/components/AuthChecker';
 import NavBar from '@/components/NavBar';
+import Link from 'next/link';
 
 
 const CuratePage = () => {
     const { user, loading } = useUser();
 
     const [data, setData] = useState<any[]>([]);
+    const [viewableData, setViewableData] = useState<any[]>([]);
     const [sortColumn, setSortColumn] = useState<string>('ID');
     const [sortDirection, setSortDirection] = useState<string>('asc');
+    const [viewAs, setViewAs] = useState<string>("")
     const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
         const fetchData = async () => {
             if (!user) return;
 
+            setViewAs(user.status);
             const response = await fetch('/api/getPendingData');
             const data = await response.json();
-            const filteredData = data.filter((item:any) => item.institution === user.institution)
-            const sortedData = sortData(filteredData, sortColumn, sortDirection)
-            setData(sortedData);
-            const initialCheckedItems = data.reduce((state:any, item:any) => ({
-                ...state,
-                [item.id]: false  // Initialize all checkboxes as unchecked
-            }), {} as Record<number, boolean>);
-            setCheckedItems(initialCheckedItems);
+            setData(data)
+            filterAndSortData(data);
         };
         fetchData();
     }, [user])
+
+    useEffect(() => {
+        if (!user) return;
+
+        console.log("yooo");
+        filterAndSortData(data);
+    }, [viewAs])
+
+    const filterAndSortData = (data:any) => {
+        let filteredData = data;
+        if (user.status === "professor" || viewAs === "professor") {
+            filteredData = data
+                .filter((item:any) => item.institution === user.institution)
+                .filter((item:any) => item.approved_by_pi === false);
+        }
+
+        const sortedData = sortData(filteredData, sortColumn, sortDirection)
+        setViewableData(sortedData);
+        const initialCheckedItems = data.reduce((state:any, item:any) => ({
+            ...state,
+            [item.id]: false  // Initialize all checkboxes as unchecked
+        }), {} as Record<number, boolean>);
+        setCheckedItems(initialCheckedItems);
+    }
 
     const handleColumnClick = (columnName: string) => {
         let newSortDirection;
@@ -41,14 +63,26 @@ const CuratePage = () => {
             setSortColumn(columnName);
             setSortDirection('asc');
         }
-        const sortedData = sortData(data, columnName, newSortDirection)
-        setData(sortedData);
+        const sortedData = sortData(viewableData, columnName, newSortDirection)
+        setViewableData(sortedData);
     };
 
     function sortData(data: any, sortColumn: string, sortDirection: string) {
         const sortedData = data.sort((a: any, b: any) => {
+            // If user is admin, sort to show data approved by pi first
             let valA, valB;
             let compareVal;
+
+            if (viewAs === "ADMIN") {
+                valA = a.approved_by_pi;
+                valB = b.approved_by_pi;
+                if (valA && !valB) {        // A is approved, B is not, A comes first
+                    return -1;
+                } else if (valB && !valA) { // B is approved, A is not, B comes first
+                    return 1;
+                } // Otherwise continue with rest of sorting
+            }
+
             if (sortColumn === 'ID') {
                 valA = a.id;
                 valB = b.id;
@@ -63,7 +97,6 @@ const CuratePage = () => {
             } else if (sortColumn === 'Creator') {
                 valA = a.creator;
                 valB = b.creator;
-                console.log(valA, valB)
                 compareVal = valA.localeCompare(valB);
             }
 
@@ -75,7 +108,7 @@ const CuratePage = () => {
                 }
             }
 
-            // Always sort by ascending ID secondarily
+            // Always sort by ID ascending secondarily
             compareVal = a.id - b.id;
             return compareVal;
 
@@ -114,17 +147,38 @@ const CuratePage = () => {
 
     const approveData = () => {
         const selectedIds = getSelectedIds();
+        console.log(selectedIds);
         fetch(`/api/curateData`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ids: selectedIds }),
+            body: JSON.stringify({ ids: selectedIds, status: viewAs }),
         }).then((response) => {
             if (!response.ok) {  // Checks if response status code is not in the 200-299 range
                 throw new Error('Failed to approve data, server responded with ' + response.status);
             }
-            setData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
+            // Make approved data invisible
+            setViewableData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
+            if (user.status === "ADMIN") {
+                if (viewAs === "ADMIN") {
+                    // Remove data from page, since it has been fully curated
+                    setData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
+                } else {
+                    // Just keep data invisible, but update for when viewAs changed to "ADMIN"
+                    data.map((item) => {
+                        if (selectedIds.includes(item.id)) {
+                            item.approved_by_pi = true;
+                        }
+                        return item;
+                    })
+                }
+            } else {
+                // Remove data from page
+                setData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
+            }
+
+            removeIdsFromCheckedItems(selectedIds);
             console.log("Successfully approved data.");
         }).catch((error) => {
             console.log(error);
@@ -133,22 +187,38 @@ const CuratePage = () => {
 
     const rejectData = () => {
         const selectedIds = getSelectedIds();
+        console.log(selectedIds);
         fetch(`/api/curateData`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ids: selectedIds }),
+            body: JSON.stringify({ ids: selectedIds, status: viewAs }),
         }).then((response) => {
             if (!response.ok) {  // Checks if response status code is not in the 200-299 range
                 throw new Error('Failed to reject data, server responded with ' + response.status);
             }
+            // Remove data from table and page
+            setViewableData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
             setData((originalData) => originalData.filter((item) => !selectedIds.includes(item.id) ));
+            removeIdsFromCheckedItems(selectedIds);
             console.log("Successfully rejected data.");
         }).catch((error) => {
             console.log(error);
         })
     }
+
+    const removeIdsFromCheckedItems = (idsToRemove: number[]) => {
+        setCheckedItems(currentItems => {
+            const updatedItems = { ...currentItems };
+            idsToRemove.forEach(id => {
+                delete updatedItems[id]; // Remove each id from the record
+            });
+            return updatedItems;
+        });
+    };
+
+
 
     return (
         <div>
@@ -156,11 +226,41 @@ const CuratePage = () => {
             <AuthChecker minimumStatus={"professor"}>
                 <div>
                     <div className="flex flex-col items-center p-4">
+                        { (user?.status === "ADMIN") &&
+                            <div className="flex flex-col items-center p-4">
+                                <p>You are curating as a {viewAs === "ADMIN" ? "D2D Network Administrator." : "professor."}</p>
+                                <p
+                                    className='underline text-blue-500 cursor-pointer'
+                                    onClick={() => setViewAs((currentView) => currentView === "ADMIN" ? "professor" : "ADMIN")}
+                                >
+                                    Click here to curate data as {viewAs === "ADMIN" ? "the instructor of a laboratory." : "a D2D Network Administrator"}
+                                </p>
+                            </div>
+                        }
+
                         <h1 className="text-2xl font-bold">Bulk Curation of Data</h1>
-                        <h2 className="text-xl">Data from the {user?.user_name} Lab or other labs at {user?.institution}</h2>
+                        { viewAs === "professor" &&
+                            <h2 className="text-xl">Data from the {user?.user_name} Lab or other labs at {user?.institution}</h2>
+                        }
+                        { viewAs === "ADMIN" &&
+                            <h2 className="text-xl">Data from the D2D Network</h2>
+                        }
+                        <p>{viewableData.length} records of data remain to be curated. Please approve or reject the data below.</p>
                         <div className="flex flex-row items-center my-2">
-                            <button onClick={approveData} className='bg-green-500 mx-2 p-2 rounded'>Approve</button>
-                            <button onClick={rejectData} className='bg-red-500 mx-2 p-2 rounded'>Reject</button>
+                            <button
+                                className={`${!Object.values(checkedItems).some(value => value === true) ? "bg-gray-500" : "bg-green-500"} mx-2 p-2 rounded`}
+                                onClick={approveData}
+                                disabled={!Object.values(checkedItems).some(value => value === true)}
+                            >
+                                Approve
+                            </button>
+                            <button
+                                className={`${!Object.values(checkedItems).some(value => value === true) ? "bg-gray-500" : "bg-red-500"} mx-2 p-2 rounded`}
+                                onClick={rejectData}
+                                disabled={!Object.values(checkedItems).some(value => value === true)}
+                            >
+                                Reject
+                            </button>
                         </div>
                         <table className="table-auto min-w-full border-collapse border border-gray-400">
                             <thead className="bg-gray-100 sticky top-0 z-10">
@@ -179,15 +279,16 @@ const CuratePage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((data, index) => (
+                                {viewableData.map((data, index) => (
                                     <>
                                         <tr>
-                                            <td className="border border-gray-300">
+                                            <td className={`border border-gray-300 ${data.approved_by_pi ? 'bg-green-400' : ''}`}>
                                                 <input
                                                     type="checkbox"
                                                     checked={checkedItems[data.id] || false}
                                                     onChange={() => handleCheckboxChange(data.id)}
                                                 />
+
                                             </td>
                                             <td className="border border-gray-300">
                                                 {data.id}
@@ -208,13 +309,18 @@ const CuratePage = () => {
                                                 {data.T50 !== null && !isNaN(data.T50) ? `${roundTo(data.T50, 1)} ± ${data.T50_SD !== null && !isNaN(data.T50_SD) ? roundTo(data.T50_SD, 1) : '—'}` : '—'}
                                             </td>
                                             <td className="border border-gray-300">
-                                                View Dataset
+                                                <Link
+                                                    className="underline text-blue-500 cursor-pointer"
+                                                    href={`/submit/single_variant/${encodeURIComponent(data.id)}`}
+                                                >
+                                                    View Dataset
+                                                </Link>
                                             </td>
                                         </tr>
                                         {data.kineticRawData && (
                                             <tr>
                                                 <td />
-                                                <td>Kin. Data: --</td>
+                                                <td>Kin. Data: </td>
                                                 <td>Plate ID: {data.kineticRawData.plate_num ?? "N/A"}</td>
                                                 <td colSpan={2}>Uploaded by: {data.kineticRawData.user_name ?? "N/A"}</td>
                                                 <td>Purif. Date: {data.kineticRawData.purification_date ?? "N/A"}</td>

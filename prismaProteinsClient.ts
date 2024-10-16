@@ -21,9 +21,3 @@ export default prismaProteins;
 // }
 
 // export default prismaProteins;
-
-
-
-
-
-
