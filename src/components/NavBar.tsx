@@ -9,9 +9,9 @@ const NavBar = () => {
   console.log(user);
   return (
     <nav className="bg-white text-white flex items-center border-b-1 border-gray-200 pt-8 gap-4 p-4 pb-7 pl-24">
-      <a href="/" className="flex items-center">
+      <Link href="/" className="flex items-center">
         <img src="/resources/images/D2D_Logo.svg" className="h-12 me-3" alt="logo" />
-      </a>
+      </Link>
       {/* Database Dropdown */}
       <div className="relative group">
         <button className="px-3 py-2 rounded-md text-sm text-black font-medium hover:bg-gray-100">Database</button>
