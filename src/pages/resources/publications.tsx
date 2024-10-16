@@ -22,7 +22,7 @@ const PublicationsPage = () => {
             <ul>
               {publications.map((publication, index) => (
                 <li key={index} className = "mb-5">
-                  {publication.id}. {publication.all_authors} <b>({publication.year})</b> "{publication.title}" 
+                  {publication.id}. {publication.all_authors} <b>({publication.year})</b> &quot;{publication.title}&quot;
                   <a className="text-orange-400 text-decoration-line: underline" href={publication.link} target="_blank" rel="noopener noreferrer">
                     {publication.journal}, {publication.volume}, {publication.issue}, {publication.first_page}
                   </a>
