@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "@nextui-org/react";
 import "../../app/globals.css";
+
+function Page({ id, variant }: { id: string, variant:string }) {
+  const link = "/bglb?id=" + id;
+  return <Link href={link}>
+    <button> {variant} </button>
+  </Link>;
+}
 
 const DataPage = () => {
   const [expandData, setExpandData] = useState(false);
@@ -274,8 +282,8 @@ const DataPage = () => {
               <td className="border border-gray-300">
                 {data.isAggregate ? (
                   <span title={`Average of ${data.count} separate experiments. Click to expand`} className="text-blue-500" onClick={() => setExpandData(true)} style={{cursor: 'pointer'}}>►</span>
-                ) : ''}
-                {getVariantDisplay(data.resid, data.resnum, data.resmut)}
+                ) : ''}  
+                {<Page id = { data.id } variant= {getVariantDisplay(data.resid, data.resnum, data.resmut)}></Page>}
               </td>
               
               {/* Yield cells */}
