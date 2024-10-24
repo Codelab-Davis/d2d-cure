@@ -123,8 +123,11 @@ const NavBar = () => {
                 </div>
               </div>
 
-              <Link href="/#" className="text-gray-900 hover:text-[#06B7DB] dark:text-white">
+              <Link href="/about" className="text-gray-900 hover:text-[#06B7DB] dark:text-white">
                 About
+              </Link>
+              <Link href="/contact" className="text-gray-900 hover:text-[#06B7DB] dark:text-white">
+                Contact us
               </Link>
             </div>
           </div>
@@ -250,9 +253,13 @@ const NavBar = () => {
               </div>
             </div>
 
-            <Link href="/#" className="block px-4 py-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <Link href="/about" className="block px-4 py-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
               About
             </Link>
+            <Link href="/contact" className="block px-4 py-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+              Contact
+            </Link>
+
           </div>
         </div>
       </div>

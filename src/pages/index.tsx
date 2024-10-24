@@ -13,10 +13,10 @@ export default function Home() {
     <div>
       <NavBar />
       {/* Container for content with responsive padding */}
-      <div className="mx-4 sm:mx-8 lg:mx-24 bg-white">
+      <div className="mx-4 sm:mx-8 lg:mx-24 py-20 bg-white">
         <div className="mt-8 text-center">
           <div className="flex flex-col lg:flex-row justify-center items-center pb-2">
-            <img src="/resources/images/D2D_Logo.svg" className="h-16 sm:h-20 pr-0 lg:pr-6 pb-3" alt="logo" />
+            <img src="/resources/images/D2D_Logo.svg" draggable="false" className="h-16 select-none sm:h-20 pr-0 lg:pr-6 pb-3" alt="logo" />
             <h1 className="text-3xl sm:text-4xl lg:text-6xl mb-5 font-semibold" style={{ color: '#06B7DB' }}>Database</h1>
           </div>
           <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold">
@@ -58,12 +58,12 @@ export default function Home() {
             </Button>
           </div>
           <div className="flex justify-center lg:justify-start">
-            <img src="/resources/images/Homepage.png" className="max-w-full" alt="mockup" />
+            <img src="/resources/images/Homepage.png" draggable="false" className="select-none max-w-full" alt="mockup" />
           </div>
         </div>
 
         {/* Analyze and Submit Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 mt-10 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 mt-20 items-center">
           <div className="lg:pt-1">
             <p className="text-lg font-semibold text-gray-500" style={{ color: '#06B7DB' }}>
               HOW IT WORKS
@@ -74,14 +74,15 @@ export default function Home() {
             </p>
           </div>
           <div className="flex justify-center lg:justify-start">
-            <img src="/resources/images/card_2.png" className="max-w-full" alt="mockup" />
+            <img src="/resources/images/card_2.png" draggable="false" className="max-w-full select-none" alt="mockup" />
           </div>
         </div>
 
         {/* Curate Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-40 mt-10 items-center">
           <div className="flex justify-center lg:justify-start">
-            <img src="/resources/images/card_large.png" className="max-w-full" alt="mockup" />
+            <img src="/resources/images/card_large.png"  draggable="false" 
+            className="max-w-full select-none" alt="mockup" />
           </div>
           <div className="lg:pt-1">
             <h1 className="text-2xl lg:text-4xl mb-4 font-inter dark:text-white">Curate</h1>
@@ -100,7 +101,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex justify-center lg:justify-start">
-            <img src="/resources/images/card_3.png" className="max-w-full" alt="mockup" />
+            <img src="/resources/images/card_3.png" draggable="false" className="max-w-full select-none" alt="mockup" />
           </div>
         </div>
 
